@@ -3,7 +3,6 @@ let speed = 0.001;
 let yEnds = [];
 let xEnds = [];
 let xSpeed = [];
-let strokeColors = [0, 40, 80, 120, 160, 200, 240];
 
 const overBoxes = [false, false, false, false, false, false, false];
 const videoPaths = [
@@ -72,11 +71,8 @@ function draw() {
             y: yEnds[i],
         }
         //handle stroke brightness
-        stroke(strokeColors[i]);
-        strokeColors[i]++;
-        if (strokeColors[i] > 255) {
-            strokeColors[i] = 0;
-        }
+        const color = 128 + sin((frameCount + i*50)*0.03) * 128;
+        stroke(color);
 
         //create the line
         bezier(
@@ -89,10 +85,10 @@ function draw() {
             endPoint.x, 
             endPoint.y
         );
-        // fill(strokeColors[i]);
-        // ellipse(endPoint.x, endPoint.y, 5, 5)
+        // fill(color);
+        // ellipse(endPoint.x, endPoint.y, 1, 3)
 
-        //x and y distance between mouse and endpoint
+        //absolute x and y distance between mouse and endpoint
         const dist = {
             x: abs(mouseX - endPoint.x),
             y: abs(mouseY - endPoint.y),
@@ -103,8 +99,9 @@ function draw() {
             overBoxes[i] = true;
             image(images[i], endPoint.x, endPoint.y, width * 0.15, (width * 0.15) * (images[i].height / images[i].width));
         } else {
-            //set 
+            //set mouse=near for clickevent
             overBoxes[i] = false;
+            image(images[i], endPoint.x, endPoint.y, width * 0.008, (width * 0.008) * (images[i].height / images[i].width));
             //change x endpoint
             xEnds[i] += xSpeed[i];
             if (xEnds[i] > width) {
@@ -114,6 +111,9 @@ function draw() {
                 xSpeed[i] = 0.001 * width;
             }
         }
+        //move video with the line
+        // const size = videos[i].size();
+        // videos[i].position(xEnds[i] - size.width * 0.5, yEnds[i] - size.height * 0.5);
     }
 
 }
@@ -122,8 +122,9 @@ function mousePressed() {
     for (let i = 0; i < imagePaths.length; i++) {
         if (overBoxes[i]) {
             videos[i].show();
-            videos[i].size(width * 0.5, AUTO);
-            videos[i].position(width * 0.25, 10);
+            videos[i].size(width * 0.15, AUTO);
+            const size = videos[i].size();
+            videos[i].position(xEnds[i] - size.width * 0.5, yEnds[i] - size.height * 0.5);
             videos[i].play();
         } else {
             videos[i].hide();
