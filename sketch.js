@@ -3,6 +3,7 @@ let speed = 0.001;
 let yEnds = [];
 let xEnds = [];
 let xSpeed = [];
+let helpText = true;
 
 const overBoxes = [false, false, false, false, false, false, false];
 const videoPaths = [
@@ -57,12 +58,21 @@ function windowResized() {
 
 function draw() {
     background(0);
-    strokeWeight(4);
     x=width * index;
     const start = {
         x: width * 0.5,
         y: height,
     }
+    if (helpText) {
+        push()
+        noStroke();
+        fill(100 + sin((frameCount)*0.03) * 100)
+        textAlign(CENTER);
+        textSize(20);
+        text('Hover over an image and click to play...', width * 0.5, height * 0.1);
+        pop();
+    }
+    strokeWeight(4);
     for (let i = 0; i < imagePaths.length; i++) {
         noFill();
         //end point for the current line
@@ -121,6 +131,8 @@ function draw() {
 function mousePressed() {
     for (let i = 0; i < imagePaths.length; i++) {
         if (overBoxes[i]) {
+            helpText = false; //disable help text
+
             videos[i].show();
             videos[i].size(width * 0.15, AUTO);
             const size = videos[i].size();
