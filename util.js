@@ -21,21 +21,22 @@ function ramp(start, end, duration, interval, onInstance, onComplete) {
     const setInt = setInterval(() => {
         if (start < end) { //when ascending
             if (curr >= end) {
-                onComplete(curr)
+                typeof onComplete === 'function' && onComplete(curr);
                 clearInterval(setInt);
             } else {
                 curr += distance / (duration/interval);
                 curr = curr > end ? end : curr;
-                onInstance(curr);
+                typeof onInstance === 'function' && onInstance(curr);
+                // onInstance(curr);
             }
         } else { //when descending
             if (curr <= end) {
-                onComplete(curr)
+                typeof onComplete === 'function' && onComplete(curr);
                 clearInterval(setInt);
             } else {
                 curr += distance / (duration/interval);
                 curr = curr < end ? end : curr;
-                onInstance(curr);
+                typeof onInstance === 'function' && onInstance(curr);
             }
         }
 

@@ -18,17 +18,23 @@ const overBoxes = [false, false, false, false, false, false, false];
 //     "https://res.cloudinary.com/casperleerink/video/upload/v1589947384/breathingbass/Video_2.mp4",
 //     "https://res.cloudinary.com/casperleerink/video/upload/v1589947384/breathingbass/Video_2.mp4"
 // ];
-const imagePaths = [
-    "assets/image/coral-cloud-coralreef.jpg",
-    "assets/image/coral-cloud-dancers.jpg",
-    "assets/image/coral-cloud-performance-bassdrum.jpg",
-    "assets/image/coral-cloud-performance.jpg",
-    "assets/image/coral-cloud-vulcano.jpg",
-    "assets/image/video_1_1.gif",
-    "assets/image/video_1_3.gif",
-];
+// const imagePaths = [
+//     "assets/image/coral-cloud-coralreef.jpg",
+//     "assets/image/coral-cloud-dancers.jpg",
+//     "assets/image/coral-cloud-performance-bassdrum.jpg",
+//     "assets/image/coral-cloud-performance.jpg",
+//     "assets/image/coral-cloud-vulcano.jpg",
+//     "assets/image/video_1_1.gif",
+//     "assets/image/video_1_3.gif",
+// ];
+const audioPaths = [
+    "assets/audio/episode-1-end-reverse.mp3",
+    "assets/audio/part-b-collapsed.mp3",
+    "assets/audio/bassdrum.mp3",
+]
 const videos = [];
 const images = [];
+const audio = [];
 
 function preload() {
     font = loadFont('assets/Raleway/Raleway-Light.ttf');
@@ -38,7 +44,9 @@ function preload() {
     // }
     abstract = loadImage("assets/image/video_1_3.gif");
     dancers = loadImage("assets/image/video_1_1.gif");
-    
+    audioPaths.forEach((path) => {
+        audio.push(loadSound(path));
+    });
 }
 
 function setup() {
@@ -54,6 +62,7 @@ function setup() {
     mgr.abstract = abstract;
     mgr.dancers = dancers;
     mgr.textA = textA;
+    mgr.audio = audio;
     mgr.wire();
     mgr.showScene(A);
     // for (let i = 0; i < imagePaths.length; i++) {
