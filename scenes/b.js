@@ -93,10 +93,10 @@ function B() {
         if (this.imageFade < 255) {
             tint(255, this.imageFade);
         }
-        image(img, 0.5*width, 100, scale*width, imgHeight);
+        image(img, 0.5*width, 130, scale*width, imgHeight);
         if (this.currentSprite) {
-            this.currentSprite.velocity.x = (width*0.5 - this.currentSprite.position.x)/100;
-            this.currentSprite.velocity.y = ((100 + imgHeight/2) - this.currentSprite.position.y)/100;
+            this.currentSprite.velocity.x = (width*0.5 - this.currentSprite.position.x)/80;
+            this.currentSprite.velocity.y = ((130 + imgHeight/2) - this.currentSprite.position.y)/80;
         }
     }
 }

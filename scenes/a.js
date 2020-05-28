@@ -93,11 +93,11 @@ function A() {
             this.textSprite.update(this.currentSprite.position.x, this.currentSprite.position.y);
         }
     }
-
-    this.mousePressed = () => {
+    
+    this.mousePress = () => {
         if (!this.currentSprite) {
             this.introText = false;
-            this.sound.play();
+            // this.sound.play();
         }
 
         if (this.currentLine >= this.sceneManager.textA.length-1) {
@@ -118,6 +118,8 @@ function A() {
             });
         }
     }
+    this.mousePressed = () => {this.mousePress()};
+    this.touchStarted = () => {this.mousePress()};
 }
 
 
