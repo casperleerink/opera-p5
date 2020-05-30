@@ -45,7 +45,7 @@ function setup() {
         strokeColors.push(color(random(0, 255)));
     }
     // mgr.showScene(C, strokeColors);
-    mgr.showScene(D);
+    mgr.showScene(A);
 
 }
 function windowResized() {
