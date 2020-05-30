@@ -22,7 +22,7 @@ function A() {
             if (this.currentLine >= this.sceneManager.textA.length-1) {
                 this.sceneManager.showScene( B, this.strokeColors);
             }
-        })
+        });
 
         //text
         this.textSprite = new TextSprite(0, height*0.5, 0, 0);
@@ -122,30 +122,3 @@ function A() {
     this.touchStarted = () => {this.mousePress()};
 }
 
-
-
-
-class TextSprite {
-    constructor(x, y, velX, velY) {
-        this.s = createSprite(x, y, 1, 1);
-        this.s.velocity.x = velX;
-        this.s.velocity.y = velY;
-    }
-
-    setDraw(t) {
-        this.s.draw = () => {
-            push();
-            fill(255);
-            textSize(16);
-            textAlign(CENTER);
-            text(t, 0, -10);
-            pop();
-        }
-        // this.s.debug = true;
-    }
-    update(x, y) {
-        this.s.velocity.x = (x - this.s.position.x)/200;
-        this.s.velocity.y = (y - this.s.position.y)/200;
-        drawSprite(this.s);
-    }
-}

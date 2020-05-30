@@ -4,11 +4,6 @@ function B() {
     this.linesAmount = 0;
     this.currentLine = -1;
     this.currentSprite;
-    this.mouseClickPos = {
-        x: width/2,
-        y: height/2,
-    }
-    this.videoFrame;
     this.sound;
     this.imageFade = 0;
     //SETUP
@@ -23,14 +18,14 @@ function B() {
             });
         }
 
-        //sound play
+        //sound
         this.sound = this.sceneManager.audio[1]; //get sound
         this.sound.onended(() => {
-            console.log("Go to next scene!");
+            this.sceneManager.showScene( C, this.strokeColors);
         });
         const duration = this.sound.duration() * 1000;
-        //fade in gif
-        ramp(-255, 255, 6000, 10, (c) => {
+        //fade in gif then play sound
+        ramp(-255, 255, 10000, 10, (c) => {
             this.imageFade = c;
         }, (c) => {
             this.sound.play();
@@ -89,14 +84,15 @@ function B() {
         //image related stuff
         const scale = 0.2;
         const img = this.sceneManager.abstract;
+        // img.filter(BLUR, 3);
         const imgHeight = scale*img.height*width/img.width;
         if (this.imageFade < 255) {
             tint(255, this.imageFade);
         }
-        image(img, 0.5*width, 130, scale*width, imgHeight);
+        const imag = image(img, 0.5*width, 50 + imgHeight/2, scale*width, imgHeight);
         if (this.currentSprite) {
-            this.currentSprite.velocity.x = (width*0.5 - this.currentSprite.position.x)/80;
-            this.currentSprite.velocity.y = ((130 + imgHeight/2) - this.currentSprite.position.y)/80;
+            this.currentSprite.velocity.x = (width*0.5 - this.currentSprite.position.x)/60;
+            this.currentSprite.velocity.y = ((50 + imgHeight) - this.currentSprite.position.y)/60;
         }
     }
 }

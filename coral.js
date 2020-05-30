@@ -98,19 +98,49 @@ class Bezier {
         this.lifespan = 255;
     }
 
-    update() {
+    update(mult) {
         // this.color.setAlpha(this.lifespan);
+        const m = mult ? mult : 0.6;
         stroke(this.color);
         bezier(
             this.x1, 
-            this.y1, 
-            width * 0.3 + (this.x2 * 0.3), 
-            this.y2 * 1.5, 
-            width * 0.4 + (this.x2 * 0.2), 
-            this.y2 * 1.2, 
+            this.y1,
+            (this.x2 - this.x1) * 0.1 + this.x1,
+            (this.y1 - this.y2) * 0.9 + this.y2, 
+            (this.x2 - this.x1) * m + this.x1,
+            (this.y1 - this.y2) * 0.15 + this.y2, 
             this.x2, 
             this.y2
         );
         this.lifespan -= 5;
+    }
+}
+
+class TextSprite {
+    constructor(x, y, velX, velY) {
+        this.s = createSprite(x, y, 1, 1);
+        this.s.velocity.x = velX;
+        this.s.velocity.y = velY;
+    }
+
+    setGroup(g) {
+        g.add(this.s);
+    }
+
+    setDraw(t) {
+        this.s.draw = () => {
+            push();
+            fill(255);
+            textSize(16);
+            textAlign(CENTER);
+            text(t, 0, -10);
+            pop();
+        }
+        // this.s.debug = true;
+    }
+    update(x, y) {
+        this.s.velocity.x = (x - this.s.position.x)/200;
+        this.s.velocity.y = (y - this.s.position.y)/200;
+        drawSprite(this.s);
     }
 }
