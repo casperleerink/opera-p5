@@ -85,7 +85,7 @@ function B() {
         //bounce edges
         bounceEdges(coralTips, (s) => {
             //change direction array on bounce
-            this.directions[coralTips.indexOf(s)] = s.velocity.x;
+            // this.directions[coralTips.indexOf(s)] = s.velocity.x;
         }, width * 0.2, width * 0.8);
 
         // drawSprites(coralTips);
