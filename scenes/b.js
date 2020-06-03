@@ -1,18 +1,22 @@
 function B() {
     this.strokeColors;
-    this.directions = [];
+    this.cloudPositions = [];
     this.linesAmount = 0;
     this.currentLine = -1;
     this.currentSprite;
     this.sound;
     this.imageFade = 0;
+    this.gradient;
+    this.gradientPos = height * 0.2;
     //SETUP
     this.setup = () => {
         background(0);
+        this.gradient = createGraphics(width, height * 0.4);
+        setGradientCashe(0, 0, width, height * 0.4, color(170), color(0), 1, this.gradient);
         this.strokeColors = this.sceneArgs;
         for (let i = 0; i < this.sceneManager.amount; i++) {
             const s = this.sceneManager.coral.coralTips.get(i);
-            this.directions.push(s.velocity.x);
+            this.cloudPositions.push(random(-0.5, 0.5));
             ramp(s.velocity.x, 0.4 * s.velocity.x, 2000, 10, (curr) => {
                 s.velocity.x = curr;
             });
@@ -21,7 +25,11 @@ function B() {
         //sound
         this.sound = this.sceneManager.audio[1]; //get sound
         this.sound.onended(() => {
-            this.sceneManager.showScene( C, this.strokeColors);
+            ramp(height * 0.2, height * -0.2, 2000, 50, (c) => {
+                this.gradientPos = c;
+            }, () => {
+                this.sceneManager.showScene( C, this.strokeColors);
+            });
         });
         const duration = this.sound.duration() * 1000;
         //fade in gif then play sound
@@ -36,7 +44,7 @@ function B() {
             0, 
             this.sceneManager.amount, 
             duration, 
-            100, 
+            500, 
             (c) => {
                 //set the coral to move to the video
                 this.currentSprite = this.sceneManager.coral.coralTips.get(Math.floor(c));
@@ -49,7 +57,8 @@ function B() {
         //clear and draw background
         clear();
         background(0);
-
+        image(this.gradient, width * 0.5, this.gradientPos);
+        
         //variables
         const coralTips = this.sceneManager.coral.coralTips;
 
@@ -91,7 +100,7 @@ function B() {
         }
         const imag = image(img, 0.5*width, 50 + imgHeight/2, scale*width, imgHeight);
         if (this.currentSprite) {
-            this.currentSprite.velocity.x = (width*0.5 - this.currentSprite.position.x)/60;
+            this.currentSprite.velocity.x = (((width*0.5) + width*scale*this.cloudPositions[coralTips.indexOf(this.currentSprite)]) - this.currentSprite.position.x)/80;
             this.currentSprite.velocity.y = ((50 + imgHeight) - this.currentSprite.position.y)/60;
         }
     }

@@ -7,10 +7,12 @@ function A() {
     this.sound;
     this.textSprite;
     this.extraBright = 0;
+    this.gradient;
+    this.gradientPos = -0.2 * height;
     //SETUP
     this.setup = () => {
         //coral
-        this.sceneManager.coral.velocity(1);
+        // this.sceneManager.coral.velocity(1);
         for (let i = 0; i < this.sceneManager.amount; i++) {
             this.strokeColors.push(color(random(0, 30), random(0, 120),random(0, 170) ));
             const s = this.sceneManager.coral.coralTips.get(i);
@@ -23,7 +25,16 @@ function A() {
                 this.sceneManager.showScene( B, this.strokeColors);
             }
         });
-
+        this.gradient = createGraphics(width, height * 0.4);
+        setGradientCashe(0, 0, width, height * 0.4, color(170), color(0), 1, this.gradient);
+        if (this.sceneArgs) {
+            ramp(-0.2 * height, 0.2 * height, 6000, 33, (c) => {
+                this.gradientPos = c;
+            });
+            this.introText = false;
+        } else {
+            this.gradientPos = 0.2 * height;
+        }
         //text
         this.textSprite = new TextSprite(0, height*0.5, 0, 0);
     }
@@ -34,7 +45,8 @@ function A() {
         //clear and draw background
         clear();
         background(0);
-
+        image(this.gradient, width * 0.5, this.gradientPos);
+        // setGradient(0, 0, width, height * 0.4, color(170), color(0), 1);
 
         //Intro text
         if (this.introText) {
@@ -42,13 +54,20 @@ function A() {
             fill(255);
             textSize(16);
             textAlign(CENTER);
-            text("Turn up your volume to experience the sounds of coral...", width * 0.5, 50);
-            text("Click anywhere to begin!", width * 0.5, 100);
+            text("Turn up your volume to experience the sounds of coral...", width * 0.5, height * 0.4);
+            text("Click anywhere to begin!", width * 0.5, height * 0.4 + 30);
             pop();
         }
         //variables
         const coralTips = this.sceneManager.coral.coralTips;
-
+        coralTips.forEach((s) => {
+            if (abs(s.velocity.x) > 1.3) {
+                s.velocity.x = s.velocity.x * 0.99;
+            }
+            if (abs(s.velocity.x) < 1.1) {
+                s.velocity.x = s.velocity.x * 1.01 + 0.001;
+            }
+        });
         //set alpha for lines
         //gradually change color
         for (let i = 0; i < this.strokeColors.length; i++) {

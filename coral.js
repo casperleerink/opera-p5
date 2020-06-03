@@ -3,6 +3,7 @@ class Coral {
         this.baseX = width * 0.5;
         this.baseY = height;
         this.coralTips = Group();
+        this.bezierDeviations = [];
         for (let i = 0; i < amount; i++) {
             //randomly create x and y end points for lines
             // yEnds.push(height * random(0.2, 0.7));
@@ -12,6 +13,7 @@ class Coral {
             s.setCollider("circle", 0, 0, 12);
             s.shapeColor = 127;
             this.coralTips.add(s);
+            this.bezierDeviations.push(random(-20, 20));
         }
         // this.beziers = [];
     }
@@ -20,6 +22,7 @@ class Coral {
         for (let i = 0; i < this.coralTips.length; i++) {
             const s = this.coralTips.get(i);
             s.velocity.x = vel * random([1, -1]);
+            s.velocity.y = 0;
         }
     }
     setImg(img) {
@@ -30,12 +33,11 @@ class Coral {
             
         }
     }
-    onPress(callback) {
-        this.coralTips.forEach((s) => {
-            s.onMousePressed = () => {
-                callback(s);
-            };
-        });
+    onPress(i, callback) {
+        const s = this.coralTips.get(i);
+        s.onMousePressed = () => {
+            typeof callback === "function" && callback(s);
+        };
     }
     onRelease(callback) {
         this.coralTips.forEach((s) => {
@@ -51,18 +53,9 @@ class Coral {
         //add
         for (let i = 0; i < this.coralTips.length; i++) {
             const s = this.coralTips.get(i);
-            const b = new Bezier(this.baseX, this.baseY, s.position.x, s.position.y, colors[i]);
+            const b = new Bezier(this.baseX, this.baseY, s.position.x, s.position.y, colors[i], this.bezierDeviations[i]);
             b.update();
         }
-        //update(draw) or remove
-        // for (let i = 0; i < this.beziers.length; i++) {
-        //     const b = this.beziers[i];
-        //     if (b.lifespan <= 0.0) {
-        //         this.beziers.splice(i, 1);
-        //     } else {
-        //         b.update();
-        //     }
-        // }
         pop();
     }
 
@@ -83,12 +76,19 @@ class Coral {
         }
     }
 
+    draw(i, callback) {
+        const s = this.coralTips.get(i);
+        s.draw = () => {
+            typeof callback === "function" && callback(s);
+        }
+    }
+
 }
 
 
 
 class Bezier {
-    constructor(x1, y1, x2, y2, c) {
+    constructor(x1, y1, x2, y2, c, deviation) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -96,6 +96,7 @@ class Bezier {
         this.c = c;
         this.color = c;
         this.lifespan = 255;
+        this.deviation = deviation;
     }
 
     update(mult) {
@@ -105,9 +106,9 @@ class Bezier {
         bezier(
             this.x1, 
             this.y1,
-            (this.x2 - this.x1) * 0.1 + this.x1,
+            ((this.x2 - this.x1) * 0.1 + this.x1) + this.deviation,
             (this.y1 - this.y2) * 0.9 + this.y2, 
-            (this.x2 - this.x1) * m + this.x1,
+            ((this.x2 - this.x1) * m + this.x1) + this.deviation,
             (this.y1 - this.y2) * 0.15 + this.y2, 
             this.x2, 
             this.y2

@@ -4,8 +4,8 @@ function C() {
     this.speedDenominator = [];
     this.randomDeviation = [];
     this.mousePosition = {
-        x: random(0, width * 0.5),
-        y: random(0, height * 0.5),
+        x: random(width*0.2, width * 0.8),
+        y: random(30, height * 0.7),
     }
     //vars
     this.sound;
@@ -29,12 +29,16 @@ function C() {
         }
         //sound setup
         this.sound = this.sceneManager.audio[2]; //get sound
-        for (let i = 1; i < this.sound.duration(); i += random(4, 10)) {        
+        for (let i = 4; i < this.sound.duration(); i += random(4, 10)) {        
             this.sound.addCue(i, this.cueCallback, i); //add random ques that trigger video displacement, text, lightning
         }
         this.sound.play();
         this.sound.onended(() => {
-            this.sceneManager.showScene( D, this.strokeColors);
+            this.div.hide();
+            this.iframe.destroy().then(() => {
+                this.div.remove();
+                this.sceneManager.showScene( D, this.strokeColors);
+            });
         });
 
         //VIDEO setup
@@ -101,9 +105,15 @@ function C() {
                 s.setDraw(this.sceneManager.textC[this.currentLine]);
                 s.setGroup(this.textGroup);
             }
-
+            const newMousePos = {
+                x: random(width * 0.2, width * 0.8),
+                y: random(30, height * 0.9),
+            }
+            while (abs(newMousePos.y - this.mousePosition.y) < this.videoHeight) {
+                newMousePos.y = random(30, height * 0.9);
+            }
             //see mousepress (mouse pos, panning, lightning)
-            this.mousePress(random(width * 0.2, width* 0.8), random(10, height * 0.9));
+            this.mousePress(newMousePos.x, newMousePos.y);
             this.lightningStrength = (cue/this.sound.duration()) * 60;
         }
     }
