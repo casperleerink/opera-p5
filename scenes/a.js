@@ -4,11 +4,29 @@ function A() {
     this.currentLine = -1;
     this.currentSprite;
     this.introText = true;
-    this.sound;
+    this.soundBegin;
+    this.soundDrone;
+    this.soundClimax;
+    this.soundExerpts = [
+        {t: 17, d: 3.5}, 
+        {t: 20, d: 2}, 
+        {t: 23, d: 3},
+        {t: 37, d: 2},
+        {t: 46, d: 3},
+        {t: 50, d: 3},
+        {t: 58, d: 3},
+        {t: 61.5, d: 5},
+        {t: 69, d: 3},
+        {t: 86, d: 2},      
+    ];
     this.textSprite;
     this.extraBright = 0;
     this.gradient;
     this.gradientPos = -0.2 * height;
+
+    // this.preload = () => {
+        
+    // }
     //SETUP
     this.setup = () => {
         //coral
@@ -19,12 +37,17 @@ function A() {
             this.directions.push(s.velocity.x);
         }
         //sound
-        this.sound = this.sceneManager.audio[0];
-        this.sound.onended(() => {
-            if (this.currentLine >= this.sceneManager.textA.length-1) {
-                this.sceneManager.showScene( B, this.strokeColors);
-            }
-        });
+        this.soundBegin = loadSound('assets/audio/part-a-begin.mp3');
+        this.soundBegin.playMode('restart');
+        this.soundDrone = loadSound('assets/audio/part-a-begin.mp3', () => {
+            this.soundDrone.loop(0, 1/3, 0.3, 10);
+            this.soundDrone.setVolume(0);
+            this.soundDrone.setVolume(1, 1.0);
+        })
+        this.soundClimax = loadSound('assets/audio/marvel-at-her-majesty.mp3');
+        // this.soundClimax.onended(() => {
+        //     this.sceneManager.showScene( B, this.strokeColors);
+        // });
         this.gradient = createGraphics(width, height * 0.4);
         setGradientCashe(0, 0, width, height * 0.4, color(170), color(0), 1, this.gradient);
         if (this.sceneArgs) {
@@ -100,15 +123,8 @@ function A() {
             //change direction array on bounce
             this.directions[coralTips.indexOf(s)] = s.velocity.x;
         }, width * 0.2, width * 0.8); //bounce back when at the edge
-        // drawSprites(coralTips);
+
         if (this.currentSprite) {
-            // push();
-            // noStroke();
-            // fill(255);
-            // textSize(16);
-            // textAlign(CENTER);
-            // text(this.sceneManager.textA[this.currentLine], this.currentSprite.position.x, this.currentSprite.position.y-10);
-            // pop();
             this.textSprite.update(this.currentSprite.position.x, this.currentSprite.position.y);
         }
     }
@@ -116,13 +132,18 @@ function A() {
     this.mousePress = () => {
         if (!this.currentSprite) {
             this.introText = false;
-            this.sound.play();
+            // this.sound.play();
         }
 
         if (this.currentLine >= this.sceneManager.textA.length-1) {
-            if (!this.sound.isPlaying()) {
-                this.sceneManager.showScene( B, this.strokeColors);
-            }
+            // if (!this.sound.isPlaying()) {
+            //     this.sceneManager.showScene(B, this.strokeColors);
+            // }
+            this.soundDrone.setVolume(0, 1.0);
+            setTimeout(() => {
+                this.soundDrone.stop();
+            }, 1000);
+            this.soundClimax.play();
         } else {
             this.currentLine++; //go to next line
             this.textSprite.setDraw(this.sceneManager.textA[this.currentLine]); //draw new line in textSprite
@@ -131,10 +152,15 @@ function A() {
             //add temporary brightness to coral
             ramp(60, 0, 2000, 10, (c) => {
                 this.extraBright = c;
-                
-            }, (c) => {
-                //do nothing
             });
+
+            //Play sound
+            const soundExerpt = random(this.soundExerpts);
+            // const soundExerpt = this.soundExerpts[this.currentLine];
+            this.soundBegin.play(0, 1, 0, soundExerpt.t, soundExerpt.d);
+            this.soundBegin.setVolume(0);
+            this.soundBegin.setVolume(0.3, 0.9);
+            this.soundBegin.setVolume(0, 0.3, soundExerpt.d - 0.1);
         }
     }
     this.mousePressed = () => {this.mousePress()};

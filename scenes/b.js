@@ -23,33 +23,32 @@ function B() {
         }
 
         //sound
-        this.sound = this.sceneManager.audio[1]; //get sound
+        this.sound = loadSound("assets/audio/part-b-collapsed.mp3", () => {
+            this.sound.play();
+            //make coral go to video one by one
+            const duration = this.sound.duration() * 1000;
+            ramp(
+                0, 
+                this.sceneManager.amount, 
+                duration, 
+                500, 
+                (c) => {
+                    //set the coral to move to the video
+                    this.currentSprite = this.sceneManager.coral.coralTips.get(Math.floor(c));
+                }
+            );
+        });
         this.sound.onended(() => {
             ramp(height * 0.2, height * -0.2, 2000, 50, (c) => {
                 this.gradientPos = c;
             }, () => {
-                this.sceneManager.showScene( C, this.strokeColors);
+                this.sceneManager.showScene(C, this.strokeColors);
             });
         });
-        const duration = this.sound.duration() * 1000;
-        //fade in gif then play sound
+        //fade in gif
         ramp(-255, 255, 10000, 10, (c) => {
             this.imageFade = c;
-        }, (c) => {
-            this.sound.play();
         });
-
-        //make coral go to video one by one
-        ramp(
-            0, 
-            this.sceneManager.amount, 
-            duration, 
-            500, 
-            (c) => {
-                //set the coral to move to the video
-                this.currentSprite = this.sceneManager.coral.coralTips.get(Math.floor(c));
-            }
-        );
     }
 
     //DRAW

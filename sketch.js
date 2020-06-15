@@ -11,17 +11,17 @@ const audioPaths = [
 ];
 const videos = [];
 const images = [];
-const audio = [];
+// const audio = [];
 function preload() {
     font = loadFont('assets/Raleway/Raleway-Light.ttf');
     textA = loadStrings('assets/textA.txt');
     textC = loadStrings('assets/textC.txt');
     textE = loadStrings('assets/textE.txt');
     abstract = loadImage("assets/image/video_1_3.gif");
-    dancers = loadImage("assets/image/video_1_1.gif");
-    audioPaths.forEach((path) => {
-        audio.push(loadSound(path));
-    });
+    // dancers = loadImage("assets/image/video_1_1.gif");
+    // audioPaths.forEach((path) => {
+    //     audio.push(loadSound(path));
+    // });
 }
 
 function setup() {
@@ -36,19 +36,18 @@ function setup() {
     mgr.coral = new Coral(textA.length);
     // mgr.coral.velocity(1);
     mgr.amount = textA.length;
-    // mgr.images = images;
     mgr.abstract = abstract;
-    mgr.dancers = dancers;
+    // mgr.dancers = dancers;
     mgr.textA = textA;
     mgr.textC = textC;
     mgr.textE = textE;
-    mgr.audio = audio;
+    // mgr.audio = audio;
     mgr.wire();
     const strokeColors = [];
     for (let i= 0; i < textA.length; i++) {
         strokeColors.push(color(random(0, 255)));
     }
-    // mgr.showScene(C, strokeColors);
+    // mgr.showScene(B, strokeColors);
     mgr.showScene(A);
 
 }
