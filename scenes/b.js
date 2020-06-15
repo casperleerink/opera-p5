@@ -89,6 +89,7 @@ function B() {
 
         // drawSprites(coralTips);
 
+        
         //image related stuff
         const scale = 0.2;
         const img = this.sceneManager.abstract;
