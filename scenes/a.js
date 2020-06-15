@@ -45,9 +45,9 @@ function A() {
             this.soundDrone.setVolume(1, 1.0);
         })
         this.soundClimax = loadSound('assets/audio/marvel-at-her-majesty.mp3');
-        // this.soundClimax.onended(() => {
-        //     this.sceneManager.showScene( B, this.strokeColors);
-        // });
+        this.soundClimax.onended(() => {
+            this.sceneManager.showScene( B, this.strokeColors);
+        });
         this.gradient = createGraphics(width, height * 0.4);
         setGradientCashe(0, 0, width, height * 0.4, color(170), color(0), 1, this.gradient);
         if (this.sceneArgs) {
