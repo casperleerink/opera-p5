@@ -4,6 +4,7 @@ function A() {
     this.currentLine = -1;
     this.currentSprite;
     this.introText = true;
+    this.demoText = false;
     this.soundBegin;
     this.soundDrone;
     this.soundClimax;
@@ -81,6 +82,16 @@ function A() {
             text("Click anywhere to begin!", width * 0.5, height * 0.4 + 30);
             pop();
         }
+        if (this.demoText) {
+            push();
+            fill(255);
+            textSize(20);
+            textAlign(CENTER);
+            text("Once She Dries", width * 0.5, height * 0.4);
+            textSize(16);
+            text("Coming soon...", width * 0.5, height * 0.4 + 30);
+            pop();
+        }
         //variables
         const coralTips = this.sceneManager.coral.coralTips;
         coralTips.forEach((s) => {
@@ -113,7 +124,6 @@ function A() {
             if (s.velocity.x !== 0) {
                 s.velocity.x = 0;
             }
-            // drawGradient(s.position.x, s.position.y, color(255, 255, 255, 0), color(255, 200, 100, 200), 50);
         }, (s) => {
             if (s.velocity.x === 0) {
                 s.velocity.x = this.directions[coralTips.indexOf(s)];
@@ -132,20 +142,21 @@ function A() {
     this.mousePress = () => {
         if (!this.currentSprite) {
             this.introText = false;
-            // this.sound.play();
         }
-
+        this.currentLine++; //go to next line
         if (this.currentLine >= this.sceneManager.textA.length-1) {
-            // if (!this.sound.isPlaying()) {
-            //     this.sceneManager.showScene(B, this.strokeColors);
-            // }
-            this.soundDrone.setVolume(0, 1.0);
-            setTimeout(() => {
-                this.soundDrone.stop();
-            }, 1000);
-            this.soundClimax.play();
+            if (this.currentSprite) {
+                this.soundDrone.setVolume(0, 1.0);
+                setTimeout(() => {
+                    this.soundDrone.stop();
+                }, 1000);
+                this.soundClimax.play();
+
+                //set text for demo
+                this.demoText = true;
+            }
+            this.currentSprite = null;
         } else {
-            this.currentLine++; //go to next line
             this.textSprite.setDraw(this.sceneManager.textA[this.currentLine]); //draw new line in textSprite
             this.currentSprite = this.sceneManager.coral.coralTips.get(this.currentLine); //set currentSprite according to the line
 
