@@ -44,8 +44,9 @@ function A() {
             this.soundDrone.setVolume(0);
             this.soundDrone.setVolume(1, 1.0);
         })
-        this.soundClimax = loadSound('https://res.cloudinary.com/casperleerink/video/upload/v1592244823/once-she-dries/marvel-at-her-majesty.mp3');
+        this.soundClimax = loadSound('assets/audio/marvel-at-her-majesty.mp3');
         this.soundClimax.onended(() => {
+            this.soundClimax.disconnect();
             this.sceneManager.showScene( B, this.strokeColors);
         });
         this.gradient = createGraphics(width, height * 0.4);
@@ -60,6 +61,18 @@ function A() {
         }
         //text
         this.textSprite = new TextSprite(0, height*0.5, 0, 0);
+
+
+        //button for test version
+        nextBtn.mousePressed(() => {
+            this.soundBegin.stop();
+            this.soundBegin.disconnect();
+            this.soundDrone.stop();
+            this.soundDrone.disconnect();
+            this.soundClimax.stop();
+            this.soundClimax.disconnect();
+            this.sceneManager.showScene(B, this.strokeColors);
+        });
     }
 
 
@@ -113,7 +126,6 @@ function A() {
             if (s.velocity.x !== 0) {
                 s.velocity.x = 0;
             }
-            // drawGradient(s.position.x, s.position.y, color(255, 255, 255, 0), color(255, 200, 100, 200), 50);
         }, (s) => {
             if (s.velocity.x === 0) {
                 s.velocity.x = this.directions[coralTips.indexOf(s)];
@@ -132,18 +144,17 @@ function A() {
     this.mousePress = () => {
         if (!this.currentSprite) {
             this.introText = false;
-            // this.sound.play();
         }
         this.currentLine++; //go to next line
-        if (this.currentLine >= this.sceneManager.textA.length-1) {
+        if (this.currentLine >= this.sceneManager.textA.length) {
             if (this.currentSprite) {
                 this.soundDrone.setVolume(0, 1.0);
                 setTimeout(() => {
                     this.soundDrone.stop();
                 }, 1000);
-                this.soundClimax.play();   
+                this.soundClimax.play();
             }
-            this.currentSprite = false;
+            this.currentSprite = null;
         } else {
             this.textSprite.setDraw(this.sceneManager.textA[this.currentLine]); //draw new line in textSprite
             this.currentSprite = this.sceneManager.coral.coralTips.get(this.currentLine); //set currentSprite according to the line
