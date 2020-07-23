@@ -22,7 +22,7 @@ function B() {
             });
         }
 
-        //sound
+        //sound\
         this.sound = loadSound("assets/audio/part-b-collapsed.mp3", () => {
             this.sound.play();
             //make coral go to video one by one

@@ -22,26 +22,27 @@ function D() {
             s.velocity.x = random(0.8, 1.3) * random([-1, 1]);
         });
 
-        this.sound = this.sceneManager.audio[3]; //get sound
-        this.sound.onended(() => {
-            this.yPos = [];
-            coralTips.forEach((s) => {
-                this.yPos.push(random(height * 0.2, height * 0.7));
-            });
-            ramp(width*0.2, width*-0.2, 4000, 33, (c) => {
+        this.sound = loadSound("assets/audio/part-d-skeletal.mp3", () => {
+            ramp(width*-0.2, width*0.2, 10000, 33, (c) => {
                 this.gradientPos = c;
-            }, () => {
-                this.sceneManager.showScene(E, this.strokeColors);
+            }, (c) => {
+                this.sound.play();
             });
-        });
+            this.sound.onended(() => {
+                this.yPos = [];
+                coralTips.forEach((s) => {
+                    this.yPos.push(random(height * 0.2, height * 0.7));
+                });
+                ramp(width*0.2, width*-0.2, 4000, 33, (c) => {
+                    this.gradientPos = c;
+                }, () => {
+                    this.sceneManager.showScene(E, this.strokeColors);
+                });
+            });
+        }); //get sound
         
         ramp(2, 0.5, 8000, 50, (c) => {
             this.bezierWeight = c;
-        });
-        ramp(width*-0.2, width*0.2, 10000, 33, (c) => {
-            this.gradientPos = c;
-        }, (c) => {
-            this.sound.play();
         });
     }
 

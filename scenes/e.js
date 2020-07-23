@@ -16,7 +16,6 @@ function E() {
     this.setup = () => {
         //CANVAS setup
         console.log("E!");
-        // this.sceneManager.coral.velocity(0.7);
         this.strokeColors = this.sceneArgs;
         const coralTips = this.sceneManager.coral.coralTips;
         coralTips.forEach((s) => {
@@ -24,21 +23,11 @@ function E() {
             s.velocity.y = 0;
         });
 
-        this.sound = this.sceneManager.audio[4]; //get sound
+        this.sound = loadSound('assets/audio/bassdrum.mp3'); //get sound
         this.sound.playMode('restart');
-        // this.sound.play();
-        // this.sound.addCue(10.11, this.changeBezierWeight);
-        // this.sound.onended(() => {
-        //     console.log("The end!");
-        // });
 
         //TEXT
         this.text = this.sceneManager.textE;
-
-        // this.sceneManager.coral.onPress(this.currentLine, () => {
-        //     this.currentLine++;
-        //     this.sceneManager.coral.draw(this.currentLine, this.textFn());
-        // });
     }
 
     //DRAW
@@ -77,16 +66,18 @@ function E() {
     }
     this.mousePress = () => {
         //add temporary brightness to coral
+        this.extraBright = 200;
         ramp(200, 0, 1000, 33, (c) => {
             this.extraBright = c;
         });
-        ramp(0.8, 0.5, 1000, 33, (c) => {
+        this.bezierWeight = this.bezierWeight > 2 ? 2 : this.bezierWeight;
+        ramp(this.bezierWeight+0.3, this.bezierWeight, 1000, 33, (c) => {
             this.bezierWeight = c;
         });
         const coralTips = this.sceneManager.coral.coralTips;
         let enoughVel = true;
         coralTips.forEach((s) => {
-            s.velocity.x = s.velocity.x * 2;
+            s.velocity.x = s.velocity.x * 2 + 0.0001;
             if (abs(s.velocity.x) < 20) {
                 enoughVel = false;
             }
@@ -94,13 +85,13 @@ function E() {
         });
         if (this.currentLine >= this.sceneManager.textE.length && enoughVel) {
             console.log("Congrats!");
-            // this.sound.stop();
-            this.sceneManager.showScene(A, true);
+            this.sceneManager.showScene(End, this.strokeColors);
             
         }
-        if (this.currentLine < this.sceneManager.textE.length) {
+
+        //play a sample excerpt
+        if (this.currentLine < this.sceneManager.textE.length && this.sound) {
             const soundExerpt = random(this.soundStarts);
-            // const soundExerpt = this.soundStarts[3];
             this.sound.play(0, 1, 0, soundExerpt.t, soundExerpt.d);
             this.sound.setVolume(0);
             this.sound.setVolume(1, 0.1);

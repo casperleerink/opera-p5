@@ -28,18 +28,22 @@ function C() {
             this.randomDeviation.push(random(-30, 30));
         }
         //sound setup
-        this.sound = this.sceneManager.audio[2]; //get sound
-        for (let i = 4; i < this.sound.duration(); i += random(4, 10)) {        
-            this.sound.addCue(i, this.cueCallback, i); //add random ques that trigger video displacement, text, lightning
-        }
-        this.sound.play();
-        this.sound.onended(() => {
-            this.div.hide();
-            this.iframe.destroy().then(() => {
-                this.div.remove();
-                this.sceneManager.showScene( D, this.strokeColors);
+        // this.sound = this.sceneManager.audio[2]; //get sound
+        this.sound = loadSound("assets/audio/storm.mp3", () => {
+            this.sound.play();
+            for (let i = 4; i < this.sound.duration(); i += random(4, 10)) {        
+                this.sound.addCue(i, this.cueCallback, i); //add random ques that trigger video displacement, text, lightning
+            }
+            this.sound.onended(() => {
+                this.div.hide();
+                this.iframe.destroy().then(() => {
+                    this.div.remove();
+                    this.sceneManager.showScene( D, this.strokeColors);
+                });
             });
         });
+
+
 
         //VIDEO setup
         this.div.id("player");
@@ -52,6 +56,8 @@ function C() {
             controls: "false",
             loop: true,
         });
+
+        //set video size and position.
         Promise.all([this.iframe.getVideoWidth(), this.iframe.getVideoHeight()]).then((dimensions) => {
             this.videoHeight = this.videoWidth * (dimensions[1]/dimensions[0]);
             this.div.size(this.videoWidth, this.videoHeight);
@@ -71,12 +77,11 @@ function C() {
     this.draw = () => {
         //clear and draw background
         clear();
-        //To do: set lightning strength to increase with song progress
+
         this.lightning ? background(random(0, this.lightningStrength)) : background(0);
-        // background(random(0, 20));
 
         //variables
-        const coralTips = this.sceneManager.coral.coralTips;
+        const coralTips = this.sceneManager.coral.coralTips; //sprites at the end of each line
         coralTips.forEach((s, i) => {
             s.velocity.x = ((this.mousePosition.x + random(-this.lightningStrength*1.5, this.lightningStrength*1.5))- s.position.x)/this.speedDenominator[i];
             s.velocity.y = ((this.mousePosition.y + random(-this.lightningStrength*1.5, this.lightningStrength*1.5)) - s.position.y)/this.speedDenominator[i];

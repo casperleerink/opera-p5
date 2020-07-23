@@ -47,8 +47,8 @@ function setup() {
     for (let i= 0; i < textA.length; i++) {
         strokeColors.push(color(random(0, 255)));
     }
-    // mgr.showScene(B, strokeColors);
-    mgr.showScene(A);
+    mgr.showScene(E, strokeColors);
+    // mgr.showScene(A);
 
 }
 function windowResized() {
