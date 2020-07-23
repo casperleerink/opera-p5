@@ -41,8 +41,26 @@ function D() {
             });
         }); //get sound
         
+        //change line width to smaller at setup
         ramp(2, 0.5, 8000, 50, (c) => {
             this.bezierWeight = c;
+        });
+
+
+        //button for test version
+        nextBtn.mousePressed(() => {
+            nextBtn.remove();
+            this.sound.stop();
+            this.sound.disconnect();
+            this.yPos = [];
+                coralTips.forEach((s) => {
+                    this.yPos.push(random(height * 0.2, height * 0.7));
+                });
+                ramp(width*0.2, width*-0.2, 4000, 33, (c) => {
+                    this.gradientPos = c;
+                }, () => {
+                    this.sceneManager.showScene(E, this.strokeColors);
+                });
         });
     }
 

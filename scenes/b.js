@@ -42,12 +42,19 @@ function B() {
             ramp(height * 0.2, height * -0.2, 2000, 50, (c) => {
                 this.gradientPos = c;
             }, () => {
+                this.sound.disconnect();
                 this.sceneManager.showScene(C, this.strokeColors);
             });
         });
         //fade in gif
         ramp(-255, 255, 10000, 10, (c) => {
             this.imageFade = c;
+        });
+
+        //button for test version
+        nextBtn.mousePressed(() => {
+            this.sound.stop();
+            this.sceneManager.showScene(C, this.strokeColors);
         });
     }
 

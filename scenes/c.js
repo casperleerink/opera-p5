@@ -72,6 +72,14 @@ function C() {
             });
         });
         
+
+        //button for test version
+        nextBtn.mousePressed(() => {
+            this.div.remove();
+            this.sound.stop();
+            this.sound.disconnect();
+            this.sceneManager.showScene(D, this.strokeColors);
+        });
     }
     //DRAW
     this.draw = () => {

@@ -1,6 +1,7 @@
 let font;
 let abstract, dancers;
 let textA, textB, textC, textD, textE;
+let nextBtn;
 
 const audioPaths = [
     "assets/audio/episode-1-end-reverse.mp3",
@@ -47,9 +48,12 @@ function setup() {
     for (let i= 0; i < textA.length; i++) {
         strokeColors.push(color(random(0, 255)));
     }
-    mgr.showScene(E, strokeColors);
-    // mgr.showScene(A);
 
+    nextBtn = createButton("Next Scene ->");
+    nextBtn.style('cursor', "pointer");
+    nextBtn.position(10, 10);
+    // mgr.showScene(E, strokeColors);
+    mgr.showScene(A);
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);

@@ -4,7 +4,6 @@ function A() {
     this.currentLine = -1;
     this.currentSprite;
     this.introText = true;
-    this.demoText = false;
     this.soundBegin;
     this.soundDrone;
     this.soundClimax;
@@ -46,9 +45,10 @@ function A() {
             this.soundDrone.setVolume(1, 1.0);
         })
         this.soundClimax = loadSound('assets/audio/marvel-at-her-majesty.mp3');
-        // this.soundClimax.onended(() => {
-        //     this.sceneManager.showScene( B, this.strokeColors);
-        // });
+        this.soundClimax.onended(() => {
+            this.soundClimax.disconnect();
+            this.sceneManager.showScene( B, this.strokeColors);
+        });
         this.gradient = createGraphics(width, height * 0.4);
         setGradientCashe(0, 0, width, height * 0.4, color(170), color(0), 1, this.gradient);
         if (this.sceneArgs) {
@@ -61,6 +61,18 @@ function A() {
         }
         //text
         this.textSprite = new TextSprite(0, height*0.5, 0, 0);
+
+
+        //button for test version
+        nextBtn.mousePressed(() => {
+            this.soundBegin.stop();
+            this.soundBegin.disconnect();
+            this.soundDrone.stop();
+            this.soundDrone.disconnect();
+            this.soundClimax.stop();
+            this.soundClimax.disconnect();
+            this.sceneManager.showScene(B, this.strokeColors);
+        });
     }
 
 
@@ -80,16 +92,6 @@ function A() {
             textAlign(CENTER);
             text("Turn up your volume to experience the sounds of coral...", width * 0.5, height * 0.4);
             text("Click anywhere to begin!", width * 0.5, height * 0.4 + 30);
-            pop();
-        }
-        if (this.demoText) {
-            push();
-            fill(255);
-            textSize(20);
-            textAlign(CENTER);
-            text("Once She Dries", width * 0.5, height * 0.4);
-            textSize(16);
-            text("Coming soon...", width * 0.5, height * 0.4 + 30);
             pop();
         }
         //variables
@@ -144,16 +146,13 @@ function A() {
             this.introText = false;
         }
         this.currentLine++; //go to next line
-        if (this.currentLine >= this.sceneManager.textA.length-1) {
+        if (this.currentLine >= this.sceneManager.textA.length) {
             if (this.currentSprite) {
                 this.soundDrone.setVolume(0, 1.0);
                 setTimeout(() => {
                     this.soundDrone.stop();
                 }, 1000);
                 this.soundClimax.play();
-
-                //set text for demo
-                this.demoText = true;
             }
             this.currentSprite = null;
         } else {
