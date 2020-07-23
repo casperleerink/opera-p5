@@ -144,7 +144,7 @@ function A() {
             this.introText = false;
         }
         this.currentLine++; //go to next line
-        if (this.currentLine >= this.sceneManager.textA.length-1) {
+        if (this.currentLine >= this.sceneManager.textA.length) {
             if (this.currentSprite) {
                 this.soundDrone.setVolume(0, 1.0);
                 setTimeout(() => {
