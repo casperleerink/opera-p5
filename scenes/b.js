@@ -23,7 +23,7 @@ function B() {
         }
 
         //sound
-        this.sound = loadSound("assets/audio/part-b-collapsed.mp3", () => {
+        this.sound = loadSound("https://res.cloudinary.com/casperleerink/video/upload/v1592244838/once-she-dries/part-b-collapsed.mp3", () => {
             this.sound.play();
             //make coral go to video one by one
             const duration = this.sound.duration() * 1000;

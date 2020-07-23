@@ -37,14 +37,14 @@ function A() {
             this.directions.push(s.velocity.x);
         }
         //sound
-        this.soundBegin = loadSound('assets/audio/part-a-begin.mp3');
+        this.soundBegin = loadSound('https://res.cloudinary.com/casperleerink/video/upload/v1592244805/once-she-dries/part-a-begin.mp3');
         this.soundBegin.playMode('restart');
-        this.soundDrone = loadSound('assets/audio/part-a-begin.mp3', () => {
+        this.soundDrone = loadSound('https://res.cloudinary.com/casperleerink/video/upload/v1592244805/once-she-dries/part-a-begin.mp3', () => {
             this.soundDrone.loop(0, 1/3, 0.3, 10);
             this.soundDrone.setVolume(0);
             this.soundDrone.setVolume(1, 1.0);
         })
-        this.soundClimax = loadSound('assets/audio/marvel-at-her-majesty.mp3');
+        this.soundClimax = loadSound('https://res.cloudinary.com/casperleerink/video/upload/v1592244823/once-she-dries/marvel-at-her-majesty.mp3');
         this.soundClimax.onended(() => {
             this.sceneManager.showScene( B, this.strokeColors);
         });
@@ -134,18 +134,17 @@ function A() {
             this.introText = false;
             // this.sound.play();
         }
-
+        this.currentLine++; //go to next line
         if (this.currentLine >= this.sceneManager.textA.length-1) {
-            // if (!this.sound.isPlaying()) {
-            //     this.sceneManager.showScene(B, this.strokeColors);
-            // }
-            this.soundDrone.setVolume(0, 1.0);
-            setTimeout(() => {
-                this.soundDrone.stop();
-            }, 1000);
-            this.soundClimax.play();
+            if (this.currentSprite) {
+                this.soundDrone.setVolume(0, 1.0);
+                setTimeout(() => {
+                    this.soundDrone.stop();
+                }, 1000);
+                this.soundClimax.play();   
+            }
+            this.currentSprite = false;
         } else {
-            this.currentLine++; //go to next line
             this.textSprite.setDraw(this.sceneManager.textA[this.currentLine]); //draw new line in textSprite
             this.currentSprite = this.sceneManager.coral.coralTips.get(this.currentLine); //set currentSprite according to the line
 

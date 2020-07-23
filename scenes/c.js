@@ -28,16 +28,17 @@ function C() {
             this.randomDeviation.push(random(-30, 30));
         }
         //sound setup
-        this.sound = this.sceneManager.audio[2]; //get sound
-        for (let i = 4; i < this.sound.duration(); i += random(4, 10)) {        
-            this.sound.addCue(i, this.cueCallback, i); //add random ques that trigger video displacement, text, lightning
-        }
-        this.sound.play();
-        this.sound.onended(() => {
-            this.div.hide();
-            this.iframe.destroy().then(() => {
-                this.div.remove();
-                this.sceneManager.showScene( D, this.strokeColors);
+        this.sound = loadSound("https://res.cloudinary.com/casperleerink/video/upload/v1592244848/once-she-dries/storm.mp3", () => {
+            for (let i = 4; i < this.sound.duration(); i += random(4, 10)) {        
+                this.sound.addCue(i, this.cueCallback, i); //add random ques that trigger video displacement, text, lightning
+            }
+            this.sound.play();
+            this.sound.onended(() => {
+                this.div.hide();
+                this.iframe.destroy().then(() => {
+                    this.div.remove();
+                    this.sceneManager.showScene( D, this.strokeColors);
+                });
             });
         });
 
