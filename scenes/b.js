@@ -33,6 +33,11 @@ function B() {
                 duration, 
                 500, 
                 (c) => {
+                    //stop previous sprite
+                    if (this.currentSprite) {
+                        this.currentSprite.velocity.x = 0;
+                        this.currentSprite.velocity.y = 0;
+                    }
                     //set the coral to move to the video
                     this.currentSprite = this.sceneManager.coral.coralTips.get(Math.floor(c));
                 }

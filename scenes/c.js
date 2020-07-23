@@ -86,7 +86,9 @@ function C() {
         //clear and draw background
         clear();
 
+        //background light up in random lightning like fashion
         this.lightning ? background(random(0, this.lightningStrength)) : background(0);
+
 
         //variables
         const coralTips = this.sceneManager.coral.coralTips; //sprites at the end of each line
@@ -126,11 +128,11 @@ function C() {
                 newMousePos.y = random(30, height * 0.9);
             }
             //see mousepress (mouse pos, panning, lightning)
-            this.mousePress(newMousePos.x, newMousePos.y);
+            this.changePos(newMousePos.x, newMousePos.y);
             this.lightningStrength = (cue/this.sound.duration()) * 60;
         }
     }
-    this.mousePress = (x, y) => {
+    this.changePos = (x, y) => {
 
         //update mouse position for div
         this.mousePosition.x = x;
@@ -142,6 +144,15 @@ function C() {
         ramp(this.sound.getPan(), panning, 300, 5, (c) => {
             this.sound.pan(c);
         });
+        //lightning background!
+        this.lightning = true;
+        setTimeout(() => { this.lightning = false }, 1000);
+    }
+
+    this.mousePress = (x, y) => {
+        //change Base x and y
+        this.sceneManager.coral.baseX = x;
+        this.sceneManager.coral.baseY = y;
         //lightning background!
         this.lightning = true;
         setTimeout(() => { this.lightning = false }, 1000);

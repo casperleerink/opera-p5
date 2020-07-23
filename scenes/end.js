@@ -1,6 +1,5 @@
 function End() {
     this.strokeColors = [];
-    this.currentSprite;
     this.demoText = true;
     this.textSprite;
     this.extraBright = 0;
@@ -9,8 +8,6 @@ function End() {
     this.setup = () => {
         //coral
         this.strokeColors = this.sceneArgs;
-        //text
-        this.textSprite = new TextSprite(0, height*0.5, 0, 0);
     }
 
 
@@ -56,10 +53,6 @@ function End() {
         bounceEdges(coralTips, (s) => {
             //change direction array on bounce
         }, width * 0.2, width * 0.8); //bounce back when at the edge
-
-        if (this.currentSprite) {
-            this.textSprite.update(this.currentSprite.position.x, this.currentSprite.position.y);
-        }
     }
 }
 

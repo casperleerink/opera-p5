@@ -82,6 +82,7 @@ function setGradient(x, y, w, h, c1, c2, axis) {
 }
 
 function setGradientCashe(x, y, w, h, c1, c2, axis, pg) {
+    pg.pixelDensity(2);
     pg.noFill();
   
     if (axis === 1) {
