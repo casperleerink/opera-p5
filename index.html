@@ -5,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Once She Dries</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/101668a678.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js"></script>
     <script src="p5.SceneManager-master/lib/scenemanager.js"></script>
-    <script src="p5.play-master/lib/p5.play.js"></script>
     <script src="https://player.vimeo.com/api/player.js"></script>
-    <script src="util.js"></script>
-    <script src="coral.js"></script>
-    <script src="scenes/a.js"></script>
-    <script src="scenes/b.js"></script>
-    <script src="scenes/c.js"></script>
-    <script src="scenes/d.js"></script>
-    <script src="scenes/e.js"></script>
-    <script src="scenes/end.js"></script>
-    <script src="sketch.js"></script>
+    <script type="module" src="modules/script.js"></script>
 </head>
 <body>
-    
+    <div class="container">
+        <button id="nextBtn">Next Scene</button>
+        <!-- The streaming player -->
+        <div id="stream-container"></div>
+
+        <!-- The sketch! -->
+        <div id="sketch-container">
+            <button id="fsButton"><i class="fas fa-expand"></i></button>
+        </div>
+
+        <!-- The welcoming page -->
+        <div id="welcome-page">
+            <div class="welcome-container">
+                <button id="startButton">Start your journey</button>
+            </div>
+        </div>
+    </div>
+    <script src="featureCheck.js"></script>
 </body>
 </html>
