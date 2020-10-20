@@ -1,3 +1,4 @@
+import {clip} from './util.js'
 class Tip {
     constructor(p, x, y, baseVel) {
         this._pos = {x, y};
@@ -30,17 +31,36 @@ class Tip {
     }
 
     bounceBoundaries() {
-        if (this._pos.x > 1.0 || this._pos.x < 0.0) {
+        if (this._pos.x >= 1.0 || this._pos.x <= 0.0) {
             this._baseVel *= -1.0;
         }
     }
     move() {
         this.bounceBoundaries()
         this._pos.x += this._baseVel;
+        this._pos.x = clip(this._pos.x, 0.0, 1.0);
+    }
+
+    follow(p, pos, speed) {
+        this._baseVel = 0;
+        const d = p.dist(this._pos.x, this._pos.y, pos.x, pos.y);
+        const angle = p.atan2(pos.y-this._pos.y, pos.x-this._pos.x);
+        const magnitude = d * speed;
+        this._pos.x += p.cos(angle) * magnitude;
+        this._pos.y += p.sin(angle) * magnitude;
+    }
+
+    moveAway(p, pos, speed) {
+        const d = p.dist(this._pos.x, this._pos.y, pos.x, pos.y);
+        if (d < speed) {
+            const angle = p.atan2(pos.y-this._pos.y, pos.x-this._pos.x);
+            const magnitude = (0.002 * speed) / d;
+            this._pos.x -= p.cos(angle) * magnitude;
+            this._pos.y -= p.sin(angle) * (magnitude*0.1);
+        }
     }
 
     draw(p, base, extra) {
-        this.move();
         if (extra > 1) {
             const color = [...this._color];
             color[0] += extra;

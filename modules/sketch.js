@@ -7,8 +7,10 @@ const sketchContainer = document.getElementById('sketch-container');
 export const sketch = (p) => {
     let cnv;
     let cloud;
+    let font;
     p.preload = () => {
         cloud = p.loadImage('assets/image/cloud.gif');
+        font = p.loadFont('assets/quicksand.ttf');
     }
     p.setup = () => {
 
@@ -18,7 +20,8 @@ export const sketch = (p) => {
 
         //set up canvas standards
         p.frameRate(30); //draw is called around 30 times/second
-        p.textSize(p.width * 0.015);
+        p.textFont(font);
+        p.textSize(p.width * 0.02);
         p.noFill();
         p.strokeWeight(1);
         p.rectMode(p.CENTER);

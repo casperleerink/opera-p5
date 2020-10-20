@@ -1,60 +1,116 @@
+import Cloud from './cloud.js'
+import C from './c.js'
+
 function B(p) {
     this.coral;
     this.gradient;
     this.cloud;
     this.startTime;
-    this.songDuration;
+    this.clickTime;
+    this.clickEnabled = true;
+    this.locations = [];
+    this.soundEnded;
     //SETUP
     this.setup = () => {
         this.coral = this.sceneManager.coral;
         this.gradient = this.sceneArgs.gradient;
-        this.cloud = this.sceneManager.cloud;
+        this.cloud = new Cloud(p, this.sceneManager.cloud, 0.2);
 
         this.startTime = p.millis();
         //sound
         this.sound = p.loadSound("assets/audio/part-b-collapsed.mp3", () => {
             this.startTime = p.millis();
             this.sound.play();
-            //make coral go to video one by one
-            this.songDuration = this.sound.duration() * 1000;
-            
         });
         this.sound.onended(() => {
-            this.soundEnded = true;
+            this.soundEnded = p.millis();
+            this.sound.disconnect();
         });
         
+        this.sceneManager.cnv.mousePressed(() => {
+            this.clickFunction(p.mouseX/p.width, p.mouseY/p.height);
+        });
         
 
+        const nextBtn = document.getElementById('nextBtn')
+        nextBtn.addEventListener('click', () => {
+            nextBtn.removeEventListener('click', this);
+            this.sound.disconnect();
+            this.sceneManager.showScene(C);
+        });
+    }
 
-        // //button for test version
-        // nextBtn.mousePressed(() => {
-        //     this.sound.stop();
-        //     this.sceneManager.showScene(C, this.strokeColors);
-        // });
+    this.clickFunction = (x, y) => {
+        if (this.clickEnabled) {
+            this.cloud.onClick(x * p.width, y * p.height, () => {
+                this.locations.push({
+                    x: x,
+                    y: y,
+                });
+                this.clickTime = p.millis();
+            });
+        }
     }
 
     //DRAW
     this.draw = () => {
+        const currentTime = p.millis();
+        const timeSinceStart = currentTime - this.startTime;
+
+
+        //When can user click on image;
+        if (this.clickTime) {
+            const delta = currentTime - this.clickTime;
+            if (this.locations.length < this.coral.tips.length && delta > 1000) {
+                this.clickEnabled = true;
+                if (delta > 10000) {
+                    this.clickFunction(Math.random(), Math.random());
+                }
+            } else {
+                this.clickEnabled = false;
+            }
+        }
         //clear and draw background
         p.clear();
         p.background(0);
-        //gradient image
-        p.image(this.gradient, p.width * 0.5, p.height*0.2, p.width, p.height*0.4);
-        
-        const currentTime = p.millis();
 
 
-        this.coral.drawB(p);
+        //gradient image (move up when sound ends)
+        if (this.soundEnded) {
+            const delta = currentTime - this.soundEnded;
+            if (delta < 5000) {
+                const h = p.map(delta, 0, 5000, 0.2, -0.2, true);
+                console.log(h);
+                p.image(this.gradient, p.width * 0.5, p.height*h, p.width, p.height*0.4);
+            } else {
+                //when gradient completed moving up start scene C
+                this.sceneManager.showScene(C);
+            }
+        } else {
+            p.image(this.gradient, p.width * 0.5, p.height*0.2, p.width, p.height*0.4);
+        }
 
+        let coloring = false;
+        if (this.locations.length >= this.coral.tips.length || this.soundEnded) {
+            coloring = true;
+        }
+        this.coral.drawB(p, coloring);
 
         //image related stuff
-        const scale = 0.2;
-        const img = this.sceneManager.cloud;
-        const imgHeight = scale*img.height*p.width/img.width;
-        if (this.imageFade < 255) {
-            p.tint(255, this.imageFade);
+        this.cloud.draw(p, timeSinceStart);
+        if (this.clickEnabled) {
+            this.cloud.onHover(p.mouseX, p.mouseY, () => {
+                document.body.style.cursor = "pointer";
+            }, () => {
+                document.body.style.cursor = "auto";
+            });
+        } else {
+            document.body.style.cursor = "auto";
         }
-        p.image(img, 0.5*p.width, 20 + imgHeight/2, scale*p.width, imgHeight);
+
+        this.locations.forEach((pos, i) => {
+            this.coral.tips[i].follow(p, pos, 0.01);
+        });
     }
 }
 

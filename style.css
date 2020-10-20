@@ -57,7 +57,11 @@ img {
     overflow: hidden;
     width: 100vw;
     height: 56.25vw;
-    background-color: white;
+    background-color: black;
+}
+#stream-container > iframe {
+    width: 100% !important;
+    height: 100%;
 }
 #welcome-page {
     display: block;

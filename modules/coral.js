@@ -41,21 +41,39 @@ class Coral {
             t.color[0] = t.color[0] + p.random([-1, 1]), 0, 255;
             t.color[1] = t.color[1] + p.random([-1, 1]), 0, 255;
             t.color[2] = t.color[2] + p.random([-1, 1]), 0, 255;
+            t.move();
             t.draw(p, this._base, this._extraBright);
         });
     }
-    drawB(p) {
+    drawB(p, atCloud) {
         this._tips.forEach(t => {
-            if (Math.round(t.color[0]) === Math.round(t.color[1]) && Math.round(t.color[1]) === Math.round(t.color[2])) {
-                //do nothing, colors are good!
+            if (atCloud) {
+                t.color[0] = t.color[0] + p.random([-1, 1]), 0, 255;
+                t.color[1] = t.color[1] + p.random([-1, 1]), 0, 255;
+                t.color[2] = t.color[2] + p.random([-1, 1]), 0, 255;
             } else {
-                const avg = (t.color[0] + t.color[1] + t.color[2]) / 3;
-                t.color.forEach((c, i) => {
-                    t.color[i] = c - (c - avg)/100;
-                });
+                if (Math.round(t.color[0]) === Math.round(t.color[1]) && Math.round(t.color[1]) === Math.round(t.color[2])) {
+                    //do nothing, colors are good!
+                } else {
+                    const avg = (t.color[0] + t.color[1] + t.color[2]) / 3;
+                    t.color.forEach((c, i) => {
+                        t.color[i] = c - (c - avg)/100;
+                    });
+                }
             }
+            t.move();
             t.draw(p, this._base, this._extraBright);
         });
+    }
+
+    drawC(p, pos) {
+        this._tips.forEach(t => {
+            if (pos) {
+                t.moveAway(p, pos, 0.4)
+            }
+            t.move();
+            t.draw(p, this._base, this._extraBright);
+        })
     }
 
 }

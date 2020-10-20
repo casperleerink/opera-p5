@@ -6,6 +6,7 @@ class Story {
         this._c = p.loadStrings('assets/textC.txt');
         this._e = p.loadStrings('assets/textE.txt');
         this._brightness = 180;
+        this._currentLine = this._a[this._index];
     }
     get index() {
         return this._index;
@@ -46,11 +47,23 @@ class Story {
 
     drawA(p) {
         if (this._a.length > 0) {
+            this._currentLine = this._a[this._index];
             p.push();
             p.noStroke();
             p.fill(255, this._brightness);
             p.textSize(p.width * 0.015);
-            p.text(this._a[this._index], this._pos.x * p.width, this._pos.y * p.height);
+            p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
+            p.pop();
+        }
+    }
+    drawC(p) {
+        if (this._c.length > 0) {
+            this._currentLine = this._c[this._index];
+            p.push();
+            p.noStroke();
+            p.fill(255, this._brightness);
+            p.textSize(p.width * 0.015);
+            p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
             p.pop();
         }
     }
@@ -58,7 +71,7 @@ class Story {
     withinDist(p, x, y) {
         const distX = Math.abs(x - this._pos.x) * p.width;
         const distY = Math.abs(y - this._pos.y);
-        const textWidth = p.textWidth(this._a[this.index]);
+        const textWidth = p.textWidth(this._currentLine);
         if (distX < textWidth*0.5 && distY < 0.02) {
             return true;
         } else {
