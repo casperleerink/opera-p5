@@ -5,13 +5,13 @@ class Tip {
         this._bezierDeviation = p.random(-0.03, 0.03);
         this._baseVel = baseVel;
         this._color = [p.random(0, 255), p.random(0, 255), p.random(0, 255)];
-        this._boundaries = {
-            x: [0.0, 1.0],
-            y: [0.0, 1.0]
-        }
+        this._boundaries = [0.0, 1.0]
     }
     get pos() {
         return this._pos;
+    }
+    set pos(o) {
+        this._pos = o;
     }
     get baseVel() {
         return this._baseVel;
@@ -29,9 +29,12 @@ class Tip {
     get boundaries() {
         return this._boundaries;
     }
+    set boundaries(arr) {
+        this._boundaries = arr;
+    }
 
     bounceBoundaries() {
-        if (this._pos.x >= 1.0 || this._pos.x <= 0.0) {
+        if (this._pos.x >= this._boundaries[1] || this._pos.x <= this._boundaries[0]) {
             this._baseVel *= -1.0;
         }
     }
@@ -56,7 +59,6 @@ class Tip {
             const angle = p.atan2(pos.y-this._pos.y, pos.x-this._pos.x);
             const magnitude = (0.002 * speed) / d;
             this._pos.x -= p.cos(angle) * magnitude;
-            this._pos.y -= p.sin(angle) * (magnitude*0.1);
         }
     }
 

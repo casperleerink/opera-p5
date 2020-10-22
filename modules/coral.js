@@ -67,12 +67,52 @@ class Coral {
     }
 
     drawC(p, pos) {
+        if (pos) {
+            this._base.x = pos.x;
+        } else {
+            this._base.x = 0.5;
+        }
         this._tips.forEach(t => {
             if (pos) {
                 t.moveAway(p, pos, 0.4)
             }
             t.move();
             t.draw(p, this._base, this._extraBright);
+        });
+    }
+
+    drawD(p, yPos, time) {
+        const x = p.sin(time*0.0002) * 0.25 + 0.5;
+        this._tips.forEach((t, i) => {
+            t.follow(
+                p,
+                {x: x, y: yPos[i]},
+                0.001
+            );
+            if (Math.round(t.color[0]) === Math.round(t.color[1]) && Math.round(t.color[1]) === Math.round(t.color[2])) {
+                //do nothing, colors are greyscale!
+            } else {
+                const avg = (t.color[0] + t.color[1] + t.color[2]) / 3;
+                t.color.forEach((c, i) => {
+                    t.color[i] = c - (c - avg)/100;
+                });
+            }
+            t.draw(p, this._base, this._extraBright);
+        });
+    }
+
+    drawE(p, bases, tipsPos, originalTips, time) {
+        this._tips.forEach((t, i) => {
+            const currBase = {...bases[i]};
+            if (time < 50000) {
+                currBase.x = p.map(time, 0, 50000, this._base.x, currBase.x);
+                currBase.y = p.map(time, 0, 50000, this._base.y, currBase.y);
+                t.pos.x = p.map(time, 0, 50000, originalTips[i].x, tipsPos[i].x);
+                t.pos.y = p.map(time, 0, 50000, originalTips[i].y, tipsPos[i].y);
+            } else {
+                t.move();
+            }
+            t.draw(p, currBase, this._extraBright);
         })
     }
 

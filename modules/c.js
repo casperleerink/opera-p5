@@ -1,4 +1,5 @@
 import Storm from './storm.js'
+import D from './d.js'
 
 export default function C(p) {
     this.story;
@@ -22,6 +23,7 @@ export default function C(p) {
                 this.sound.disconnect();
                 this.storm.pause();
                 this.storm.destroy();
+                this.sceneManager.showScene(D);
             });
         });
 
@@ -38,6 +40,15 @@ export default function C(p) {
 
         this.sceneManager.cnv.mousePressed(() => {
             this.clickFunction(p.mouseX/p.width, p.mouseY/p.height);
+        });
+
+        const nextBtn = document.getElementById('nextBtn')
+        nextBtn.addEventListener('click', () => {
+            nextBtn.removeEventListener('click', this);
+            this.sound.disconnect();
+            this.storm.pause();
+            this.storm.destroy();
+            this.sceneManager.showScene(D);
         });
     }
     //MOUSEPRESS FUNCTION
