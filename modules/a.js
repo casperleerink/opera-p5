@@ -45,6 +45,7 @@ function A(p) {
             //go to next scene, disconnect old sounds to clean up memory.
             this.soundClimax.disconnect();
             this.soundDrone.disconnect();
+            document.body.style.cursor = "auto";
             this.sceneManager.showScene(B, {gradient: this.gradient});
         });
         this.gradient = p.createGraphics(p.width, p.height * 0.4);
@@ -90,7 +91,7 @@ function A(p) {
                 document.body.style.cursor = "auto";
             });
         } else {
-            document.body.style.cursor = "auto";
+            document.body.style.cursor = "none";
             const timeSinceClimax = currentTime - this.climaxReached;
             if (timeSinceClimax < 10000) {
                 this.story.brightness = (1 - timeSinceClimax/10000) * 255;

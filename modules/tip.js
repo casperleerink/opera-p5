@@ -59,6 +59,9 @@ class Tip {
             const angle = p.atan2(pos.y-this._pos.y, pos.x-this._pos.x);
             const magnitude = (0.002 * speed) / d;
             this._pos.x -= p.cos(angle) * magnitude;
+            if (this._pos.y < 0.7) {
+                this._pos.y += magnitude *0.2; //pop pop!
+            }
         }
     }
 

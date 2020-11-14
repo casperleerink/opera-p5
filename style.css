@@ -3,6 +3,7 @@
 :root {
     --background-color: #000;
     --primary-color: #eee;
+    --secondary-color: rgb(2, 26, 92);
 }
 
 * {
@@ -108,6 +109,7 @@ img {
 .welcome-container {
     padding: 2rem;
     width: 100%;
+    color: var(--primary-color);
     /* min-height: 100%; */
 }
 .welcome-container h1 {
@@ -116,7 +118,7 @@ img {
 .welcome-container .quote {
     padding-left: 1rem;
 }
-.welcome-container button {
+.welcome-container > button {
     color: var(--secondary-color);
     border: 1px solid var(--primary-color);
     margin: 1rem 0;

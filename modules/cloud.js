@@ -3,20 +3,27 @@ export default class Cloud {
         this._img = img;
         this._scale = scale;
         this._imgHeight = this._scale*this._img.height*p.width/this._img.width;
-        this._x = 0.5*p.width;
+        this._x = 0.5;
         this._y = 20 + this._imgHeight/2;
         this._w = this._scale*p.width;
         this._extraBright = 0;
     }
 
-    draw(p, timeSinceStart) {
+    draw(p, timeSinceStart, timeSinceClick, glow) {
         this._imgHeight = this._scale*this._img.height*p.width/this._img.width;
         this._x = 0.5*p.width;
         this._y = 20 + this._imgHeight/2;
         this._w = this._scale*p.width;
+        const sinTime = p.sin((timeSinceStart * 0.001) - p.HALF_PI) + 1;
         p.push();
-        p.tint(255, (p.sin((timeSinceStart * 0.0001) - p.HALF_PI) + 1) * 127 + this._extraBright);
-        p.image(this._img, this._x, this._y, this._scale*p.width, this._imgHeight);
+        p.tint(255, (sinTime * 60) + this._extraBright);
+        p.image(this._img, this._x, this._y, this._w, this._imgHeight);
+        if (timeSinceClick > 1000 && glow) {
+            p.stroke(224, 249, 255, ((timeSinceClick-1000)/10000) * 200);
+            p.strokeWeight(2);
+            p.noFill();
+            p.rect(this._x, this._y, this._w + 2, this._imgHeight + 2, 5);
+        }
         p.pop();
     }
 

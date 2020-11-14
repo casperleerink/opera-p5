@@ -107,11 +107,14 @@ class Coral {
             if (time < 50000) {
                 currBase.x = p.map(time, 0, 50000, this._base.x, currBase.x);
                 currBase.y = p.map(time, 0, 50000, this._base.y, currBase.y);
-                t.pos.x = p.map(time, 0, 50000, originalTips[i].x, tipsPos[i].x);
+                // t.pos.x = p.map(time, 0, 50000, originalTips[i].x, tipsPos[i].x);
                 t.pos.y = p.map(time, 0, 50000, originalTips[i].y, tipsPos[i].y);
             } else {
-                t.move();
+                t.color[0] = t.color[0] + p.random([-1, 1]), 0, 255;
+                t.color[1] = t.color[1] + p.random([-1, 1]), 0, 255;
+                t.color[2] = t.color[2] + p.random([-1, 1]), 0, 255;
             }
+            t.move();
             t.draw(p, currBase, this._extraBright);
         })
     }

@@ -2,27 +2,32 @@ export default function E(p) {
     this.coral;
     this.story;
     this.startTime;
-    this.sound;
-    this.soundStarts = [
-        {t: 31.5, d: 2}, 
-        {t: 37, d: 2},
-        {t: 42, d: 4},
-        {t: 52, d: 2},
-    ];
+    this.bassdrumSounds = [];
     this.soundEnded;
+    this.textFollow;
+    this.storyCompleted = false;
 
     this.basePositions = [];
     this.tipPositions = [];
     this.originalTipPositions = [];
     this.setup = () => {
-        console.log("E!");
         this.coral = this.sceneManager.coral;
         this.story = this.sceneManager.story;
+        this.story.index = 0;
+        this.story.pos = {x:-0.1, y:0.5};
+        this.textFollow = p.random(this.coral.tips).pos;
         this.startTime = p.millis();
         
-
-        this.sound = p.loadSound('assets/audio/bassdrum.mp3'); //get sound
-        this.sound.playMode('restart');
+        //load all bassdrum sounds
+        for (let i = 0; i < 12; i++) {
+            const sound = p.loadSound(`assets/audio/bassdrum/${i+1}.mp3`);
+            sound.playMode('restart');
+            this.bassdrumSounds.push(sound);
+        }
+        //start playing the tune
+        const sound = p.loadSound('assets/audio/soft-piano-tune.mp3', () => {
+            sound.play();
+        });
 
 
         //CORAL BASE
@@ -36,8 +41,34 @@ export default function E(p) {
                 y: p.random(0.1, 0.7)
             });
             this.originalTipPositions.push({...t.pos});
-        })
+            t.baseVel = 0.001;
+        });
 
+        //CLICK
+        this.sceneManager.cnv.mousePressed(() => {
+            this.clickFunction(p.mouseX/p.width, p.mouseY/p.height);
+        });
+    }
+
+    this.clickFunction = (x, y) => {
+        this.story.onClick(p, x, y, () => {
+            if (this.story.index < this.story.e.length-1) {
+                this.story.index++;
+                this.textFollow = p.random(this.sceneManager.coral.tips).pos;
+                //play a sample excerpt
+                const sound = p.random(this.bassdrumSounds);
+                sound.play();
+                this.coral.tips.forEach(t => {
+                    t.color[2] += p.random(0, 5);
+                })
+            } else {
+                if (!this.storyCompleted) {
+                    this.bassdrumSounds.forEach(s => { s.disconnect() });
+                    this.storyCompleted = p.millis();
+                    document.body.style.cursor = "auto";
+                }
+            }
+        });
     }
 
     //DRAW
@@ -48,26 +79,19 @@ export default function E(p) {
         const timeSinceStart = p.millis() - this.startTime;
         this.coral.drawE(p, this.basePositions, this.tipPositions, this.originalTipPositions, timeSinceStart);
 
-        if (timeSinceStart > 50000) {
-            p.strokeWeight(p.map(timeSinceStart, 50000, 100000, 0.5, p.height, true));
+        //STORY TEXT
+        if (!this.storyCompleted && timeSinceStart > 5000) {
+            this.story.follow(p, this.textFollow, 0.02);
+            this.story.drawE(p);
+            this.story.onHover(p, p.mouseX/p.width, p.mouseY/p.height, () => {
+                document.body.style.cursor = "pointer";
+            }, () => {
+                document.body.style.cursor = "auto";
+            });
         }
-        //COLOR CORAL BLUE
-    }
 
-    this.clickFunction = () => {
-
-        //add temporary brightness to coral
-        
-        //increase velocity
-
-
-        //play a sample excerpt
-        if (this.currentLine < this.sceneManager.textE.length && this.sound) {
-            const soundExerpt = random(this.soundStarts);
-            this.sound.play(0, 1, 0, soundExerpt.t, soundExerpt.d);
-            this.sound.setVolume(0);
-            this.sound.setVolume(1, 0.1);
-            this.sound.setVolume(0, 0.3, soundExerpt.d - 0.3);
+        if (this.storyCompleted) {
+            p.strokeWeight(p.map(p.millis() - this.storyCompleted, 0, 300000, 0.5, p.height*0.1, true));
         }
     }
 }

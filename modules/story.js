@@ -68,6 +68,18 @@ class Story {
         }
     }
 
+    drawE(p) {
+        if (this._e.length > 0) {
+            this._currentLine = this._e[this._index];
+            p.push();
+            p.noStroke();
+            p.fill(255, this._brightness);
+            p.textSize(p.width * 0.015);
+            p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
+            p.pop();
+        }
+    }
+
     withinDist(p, x, y) {
         const distX = Math.abs(x - this._pos.x) * p.width;
         const distY = Math.abs(y - this._pos.y);

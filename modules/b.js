@@ -7,9 +7,11 @@ function B(p) {
     this.cloud;
     this.startTime;
     this.clickTime;
+    this.deltaClickTime = 0;
     this.clickEnabled = true;
     this.locations = [];
     this.soundEnded;
+    this.glow = true;
     //SETUP
     this.setup = () => {
         this.coral = this.sceneManager.coral;
@@ -17,6 +19,7 @@ function B(p) {
         this.cloud = new Cloud(p, this.sceneManager.cloud, 0.2);
 
         this.startTime = p.millis();
+        this.clickTime = p.millis();
         //sound
         this.sound = p.loadSound("assets/audio/part-b-collapsed.mp3", () => {
             this.startTime = p.millis();
@@ -28,6 +31,7 @@ function B(p) {
         });
         
         this.sceneManager.cnv.mousePressed(() => {
+            this.glow = false;
             this.clickFunction(p.mouseX/p.width, p.mouseY/p.height);
         });
         
@@ -57,13 +61,12 @@ function B(p) {
         const currentTime = p.millis();
         const timeSinceStart = currentTime - this.startTime;
 
-
         //When can user click on image;
         if (this.clickTime) {
-            const delta = currentTime - this.clickTime;
-            if (this.locations.length < this.coral.tips.length && delta > 1000) {
+            this.deltaClickTime = currentTime - this.clickTime;
+            if (this.locations.length < this.coral.tips.length && this.deltaClickTime > 1000) {
                 this.clickEnabled = true;
-                if (delta > 10000) {
+                if (this.deltaClickTime > 10000) {
                     this.clickFunction(Math.random(), Math.random());
                 }
             } else {
@@ -97,7 +100,7 @@ function B(p) {
         this.coral.drawB(p, coloring);
 
         //image related stuff
-        this.cloud.draw(p, timeSinceStart);
+        this.cloud.draw(p, timeSinceStart, this.deltaClickTime, this.glow);
         if (this.clickEnabled) {
             this.cloud.onHover(p.mouseX, p.mouseY, () => {
                 document.body.style.cursor = "pointer";
@@ -105,11 +108,15 @@ function B(p) {
                 document.body.style.cursor = "auto";
             });
         } else {
-            document.body.style.cursor = "auto";
+            if (coloring) {
+                document.body.style.cursor = "none";
+            } else {
+                document.body.style.cursor = "not-allowed";
+            }
         }
 
         this.locations.forEach((pos, i) => {
-            this.coral.tips[i].follow(p, pos, 0.01);
+            this.coral.tips[i].follow(p, pos, 0.025);
         });
     }
 }
