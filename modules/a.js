@@ -12,6 +12,7 @@ function A(p) {
 
     //SETUP
     this.setup = () => {
+        this.startTime = p.millis();
         //coral
         this.coral = this.sceneManager.coral;
 
@@ -83,7 +84,9 @@ function A(p) {
             this.coral.extraBright = (1 - timeDiffClicked/2000) * 50;
         }
         this.coral.drawA(p);
-        this.story.follow(p, this.coral.tips[this.story.index].pos, 0.01);
+        if ((currentTime - this.startTime) > 15000) {
+            this.story.follow(p, this.coral.tips[this.story.index].pos, 0.01);   
+        }
         if (!this.climaxReached) {
             this.story.onHover(p, p.mouseX/p.width, p.mouseY/p.height, () => {
                 document.body.style.cursor = "pointer";

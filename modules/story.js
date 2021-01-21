@@ -1,7 +1,7 @@
 class Story {
     constructor(p) {
         this._index = 0;
-        this._pos = {x:0.5, y:0.5}
+        this._pos = {x:-0.2, y:0.5}
         this._a = p.loadStrings('assets/textA.txt');
         this._c = p.loadStrings('assets/textC.txt');
         this._e = p.loadStrings('assets/textE.txt');
