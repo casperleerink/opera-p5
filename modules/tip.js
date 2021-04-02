@@ -48,9 +48,13 @@ class Tip {
       this._baseVel *= -1.0;
     }
   }
-  move() {
+  move(speed) {
     this.bounceBoundaries();
-    this._pos.x += this._baseVel;
+    if (speed) {
+      this._pos.x += this._baseVel * speed;
+    } else {
+      this._pos.x += this._baseVel;
+    }
     this._pos.x = clip(this._pos.x, 0.0, 1.0);
   }
 
@@ -94,6 +98,7 @@ class Tip {
     );
   }
   drawC(p, base, xDeviation) {
+    p.stroke(this._color);
     p.bezier(
       base.x * p.width,
       base.y * p.height,

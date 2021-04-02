@@ -1,110 +1,176 @@
 class Story {
-    constructor(p) {
-        this._index = 0;
-        this._pos = {x:-0.2, y:0.5}
-        this._a = p.loadStrings('assets/textA.txt');
-        this._c = p.loadStrings('assets/textC.txt');
-        this._e = p.loadStrings('assets/textE.txt');
-        this._brightness = 180;
-        this._currentLine = this._a[this._index];
-    }
-    get index() {
-        return this._index;
-    }
-    set index(i) {
-        this._index = i;
-    }
-    get pos() {
-        return this._pos;
-    }
-    set pos(o) {
-        this._pos = o;
-    }
-    get brightness() {
-        return this._brightness;
-    }
-    set brightness(i) {
-        this._brightness = i;
-    }
-    get a() {
-        return this._a;
-    }
-    get c() {
-        return this._c;
-    }
-    get e() {
-        return this._e;
-    }
+  constructor(p) {
+    this._index = 0;
+    this._pos = { x: -0.2, y: 0.5 };
+    this._a = p.loadStrings("assets/textA.txt");
+    this._c = p.loadStrings("assets/textC.txt");
+    this._d = p.loadStrings("assets/textD.txt");
+    this._e = p.loadStrings("assets/textE.txt");
+    this._brightness = 180;
+    this._currentLine = this._a[this._index];
+  }
+  get index() {
+    return this._index;
+  }
+  set index(i) {
+    this._index = i;
+  }
+  get pos() {
+    return this._pos;
+  }
+  set pos(o) {
+    this._pos = o;
+  }
+  get brightness() {
+    return this._brightness;
+  }
+  set brightness(i) {
+    this._brightness = i;
+  }
+  get a() {
+    return this._a;
+  }
+  get c() {
+    return this._c;
+  }
+  get d() {
+    return this._d;
+  }
+  get e() {
+    return this._e;
+  }
 
+  follow(p, pos, speed) {
+    const d = p.dist(this._pos.x, this._pos.y, pos.x, pos.y);
+    const angle = p.atan2(pos.y - this._pos.y, pos.x - this._pos.x);
+    const magnitude = d * speed;
+    this._pos.x += p.cos(angle) * magnitude;
+    this._pos.y += p.sin(angle) * magnitude;
+  }
 
-    follow(p, pos, speed) {
-        const d = p.dist(this._pos.x, this._pos.y, pos.x, pos.y);
-        const angle = p.atan2(pos.y-this._pos.y, pos.x-this._pos.x);
-        const magnitude = d * speed;
-        this._pos.x += p.cos(angle) * magnitude;
-        this._pos.y += p.sin(angle) * magnitude;
+  drawA(p) {
+    if (this._a.length > 0) {
+      this._currentLine = this._a[this._index];
+      p.push();
+      p.noStroke();
+      p.fill(255, this._brightness);
+      p.textSize(p.width * 0.015);
+      p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
+      p.pop();
     }
+  }
+  drawC(p) {
+    if (this._c.length > 0) {
+      this._currentLine = this._c[this._index];
+      p.push();
+      p.noStroke();
+      p.fill(255, this._brightness);
+      p.textSize(p.width * 0.015);
+      p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
+      p.pop();
+    }
+  }
+  drawCloudLostFound(p, lost) {
+    p.push();
+    p.noStroke();
+    p.fill(255);
+    p.textSize(p.width * 0.015);
+    const text = lost ? "Cloud has been lost..." : "And Coral is found...";
+    p.text(text, this._pos.x * p.width, this._pos.y * p.height);
+    p.pop();
+  }
+  insidePantheon(p, brightness) {
+    p.push();
+    p.noStroke();
+    p.fill(255, this._brightness * brightness);
+    p.textSize(p.width * 0.02);
+    p.text("Inside Pantheon", 0.5 * p.width, 0.4 * p.height);
+    p.pop();
+  }
+  drawDbegin(p, time) {
+    p.push();
+    p.noStroke();
+    let brightness = 1;
+    if (time < 2000) {
+      brightness = time / 2000;
+    }
+    if (time > 8000 && time < 10000) {
+      brightness = 1 - (time - 8000) / 2000;
+    }
+    p.fill(255, this._brightness * brightness);
+    p.textSize(p.width * 0.015);
+    this._d.forEach((line, idx) => {
+      if (idx < 5) {
+        p.text(line, 0.5 * p.width, (0.3 + idx * 0.05) * p.height);
+      }
+    });
+    p.pop();
+  }
+  drawDEnd(p, time) {
+    p.push();
+    p.noStroke();
+    let brightness = 1;
+    if (time < 2000) {
+      brightness = time / 2000;
+    }
+    if (time > 8000 && time < 10000) {
+      brightness = 1 - (time - 8000) / 2000;
+    }
+    p.fill(255, this._brightness * brightness);
+    p.textSize(p.width * 0.015);
+    this._d.forEach((line, idx) => {
+      if (idx > 4) {
+        p.text(line, 0.5 * p.width, (0.3 + idx * 0.05) * p.height);
+      }
+    });
+    p.pop();
+  }
+  onceSheDries(p, brightness) {
+    p.push();
+    p.noStroke();
+    p.fill(255, this._brightness * brightness);
+    p.textSize(p.width * 0.02);
+    p.text("Once She Dries", 0.5 * p.width, 0.4 * p.height);
+    p.pop();
+  }
 
-    drawA(p) {
-        if (this._a.length > 0) {
-            this._currentLine = this._a[this._index];
-            p.push();
-            p.noStroke();
-            p.fill(255, this._brightness);
-            p.textSize(p.width * 0.015);
-            p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
-            p.pop();
-        }
+  drawE(p) {
+    if (this._e.length > 0) {
+      this._currentLine = this._e[this._index];
+      p.push();
+      p.noStroke();
+      p.fill(255, this._brightness);
+      p.textSize(p.width * 0.015);
+      p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
+      p.pop();
     }
-    drawC(p) {
-        if (this._c.length > 0) {
-            this._currentLine = this._c[this._index];
-            p.push();
-            p.noStroke();
-            p.fill(255, this._brightness);
-            p.textSize(p.width * 0.015);
-            p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
-            p.pop();
-        }
-    }
+  }
 
-    drawE(p) {
-        if (this._e.length > 0) {
-            this._currentLine = this._e[this._index];
-            p.push();
-            p.noStroke();
-            p.fill(255, this._brightness);
-            p.textSize(p.width * 0.015);
-            p.text(this._currentLine, this._pos.x * p.width, this._pos.y * p.height);
-            p.pop();
-        }
+  withinDist(p, x, y) {
+    const distX = Math.abs(x - this._pos.x) * p.width;
+    const distY = Math.abs(y - this._pos.y);
+    const textWidth = p.textWidth(this._currentLine);
+    if (distX < textWidth * 0.5 && distY < 0.02) {
+      return true;
+    } else {
+      return false;
     }
+  }
 
-    withinDist(p, x, y) {
-        const distX = Math.abs(x - this._pos.x) * p.width;
-        const distY = Math.abs(y - this._pos.y);
-        const textWidth = p.textWidth(this._currentLine);
-        if (distX < textWidth*0.5 && distY < 0.02) {
-            return true;
-        } else {
-            return false;
-        }
+  onClick(p, x, y, callback) {
+    if (this.withinDist(p, x, y)) {
+      typeof callback === "function" && callback();
     }
-
-    onClick(p, x, y, callback) {
-        if (this.withinDist(p, x, y)) {
-            typeof callback === "function" && callback();
-        }
+  }
+  onHover(p, x, y, on, off) {
+    if (this.withinDist(p, x, y)) {
+      this._brightness = 255;
+      typeof on === "function" && on();
+    } else {
+      this._brightness = 180;
+      typeof off === "function" && off();
     }
-    onHover(p, x, y, on, off) {
-        if (this.withinDist(p, x, y)) {
-            this._brightness = 255;
-            typeof on === "function" && on();
-        } else {
-            this._brightness = 180;
-            typeof off === "function" && off();
-        }
-    }
+  }
 }
 
 export default Story;

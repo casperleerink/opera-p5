@@ -8,6 +8,7 @@ export default function C(p) {
   this.currentCue = 0;
   this.lightning = false;
   this.lightningStrength = 150;
+  this.cloudLost = true;
 
   this.textFollow;
 
@@ -23,9 +24,7 @@ export default function C(p) {
       this.sound.play();
       this.sound.onended(() => {
         this.sound.disconnect();
-        this.storm.pause();
-        this.storm.destroy();
-        this.sceneManager.showScene(D);
+        this.soundEnded = p.millis();
       });
     });
 
@@ -61,22 +60,59 @@ export default function C(p) {
     this.story.onClick(p, x, y, () => {
       this.clickedTime = p.millis();
       this.story.index++;
-      this.textFollow = p.random(this.sceneManager.coral.tips).pos;
+      if (this.story.index >= this.story.c.length) {
+        this.storyEnded = true;
+        document.body.style.cursor = "auto";
+      } else {
+        this.storyEnded = false;
+        this.textFollow = p.random(this.sceneManager.coral.tips).pos;
+      }
       this.lightning = { x, y };
       setTimeout(() => {
         this.lightning = undefined;
-      }, 3000);
+      }, 2000);
     });
   };
+
   //DRAW
   this.draw = () => {
     const currentTime = p.millis();
+    const songProgress = this.sound.isLoaded()
+      ? this.sound.currentTime() / this.sound.duration()
+      : 0;
+
     //clear and draw background
     p.clear();
-    this.lightning
-      ? p.background(0, 255 - this.lightningStrength)
-      : p.background(0, 255);
+    if (this.soundEnded) {
+      const timeSinceEnd = currentTime - this.soundEnded;
+      if (timeSinceEnd < 2000) {
+        this.fadeProgress = timeSinceEnd / 2000;
+        p.background(0, this.fadeProgress * 255);
+      } else {
+        if (!this.fadedOut) {
+          this.sound.disconnect();
+          this.storm.pause();
+          this.storm.destroy();
+        }
+        this.fadedOut = true;
+        p.background(0);
+        if (timeSinceEnd < 8000) {
+          //Show Inside Pantheon text
+        } else {
+          this.sceneManager.showScene(D);
+        }
+      }
+    } else {
+      if (this.storyEnded) {
+        p.background(0, 0);
+      } else {
+        this.lightning
+          ? p.background(0, 255 - this.lightningStrength)
+          : p.background(0, 255 - p.random(songProgress * 30));
+      }
+    }
 
+    //Move Coral down a bit at the beginning
     if (currentTime - this.startTime < 20000) {
       this.sceneManager.coral.tips.forEach((t) => {
         const vel = 0.001 * (0.8 - t.pos.y) * Math.random();
@@ -90,47 +126,36 @@ export default function C(p) {
     this.sceneManager.coral.drawC(
       p,
       this.lightning,
-      currentTime - this.clickedTime
+      currentTime - this.clickedTime,
+      this.soundEnded ? (1 - this.fadeProgress) * 3.5 : songProgress * 3 + 0.5
     );
 
     //Draw Text!
-    this.story.follow(p, this.textFollow, 0.02);
-    this.story.drawC(p);
-    this.story.onHover(
-      p,
-      p.mouseX / p.width,
-      p.mouseY / p.height,
-      () => {
-        document.body.style.cursor = "pointer";
-      },
-      () => {
-        document.body.style.cursor = "auto";
+    if (!this.soundEnded) {
+      if (!this.storyEnded) {
+        this.story.follow(p, this.textFollow, 0.02);
+        this.story.drawC(p);
+        this.story.onHover(
+          p,
+          p.mouseX / p.width,
+          p.mouseY / p.height,
+          () => {
+            document.body.style.cursor = "pointer";
+          },
+          () => {
+            document.body.style.cursor = "auto";
+          }
+        );
+      } else {
+        this.story.follow(p, this.textFollow, 0.15);
+        this.story.drawCloudLostFound(p, this.cloudLost);
+        if (currentTime % Math.round(Math.random() * 400) === 0) {
+          this.cloudLost = !this.cloudLost;
+          this.textFollow = p.random(this.sceneManager.coral.tips).pos;
+        }
       }
-    );
+    } else {
+      this.story.insidePantheon(p, this.fadeProgress);
+    }
   };
-
-  // this.cueCallback = (cue) => {
-  //     if (this.currentCue != cue) {
-  //         this.currentCue = cue;
-
-  //         //make text appear on former video position
-  //         this.currentLine++;
-  //         this.textGroup.removeSprites();
-  //         if (this.currentLine < this.sceneManager.textC.length) {
-  //             const s = new TextSprite(this.mousePosition.x, this.mousePosition.y, 0, 0);
-  //             s.setDraw(this.sceneManager.textC[this.currentLine]);
-  //             s.setGroup(this.textGroup);
-  //         }
-  //         const newMousePos = {
-  //             x: random(width * 0.2, width * 0.8),
-  //             y: random(30, height * 0.9),
-  //         }
-  //         while (abs(newMousePos.y - this.mousePosition.y) < this.videoHeight) {
-  //             newMousePos.y = random(30, height * 0.9);
-  //         }
-  //         //see mousepress (mouse pos, panning, lightning)
-  //         this.mousePress(newMousePos.x, newMousePos.y);
-  //         this.lightningStrength = (cue/this.sound.duration()) * 60;
-  //     }
-  // }
 }

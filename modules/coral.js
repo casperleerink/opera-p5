@@ -42,7 +42,7 @@ class Coral {
       (t.color[0] = t.color[0] + p.random([-1, 1])), 0, 255;
       (t.color[1] = t.color[1] + p.random([-1, 1])), 0, 255;
       (t.color[2] = t.color[2] + p.random([-1, 1])), 0, 255;
-      t.move();
+      t.move(1);
       t.draw(p, this._base, this._extraBright);
     });
   }
@@ -70,12 +70,7 @@ class Coral {
     });
   }
 
-  drawC(p, pos, timeSinceClick) {
-    // if (pos) {
-    //   this._base.x = pos.x;
-    // } else {
-    //   this._base.x = 0.5;
-    // }
+  drawC(p, pos, timeSinceClick, speed) {
     this._tips.forEach((t) => {
       let deviation = 0;
       if (pos) {
@@ -89,8 +84,8 @@ class Coral {
           t.moveAway(p, pos, 0.1);
         }
       }
-      t.move();
-      t.drawC(p, this._base, deviation);
+      t.move(speed);
+      t.drawC(p, this._base, deviation * speed);
     });
   }
 
@@ -113,13 +108,11 @@ class Coral {
     });
   }
 
-  drawE(p, time) {
+  drawE(p) {
     this._tips.forEach((t, i) => {
-      if (time) {
-        (t.color[0] = t.color[0] + p.random([-1, 1])), 0, 255;
-        (t.color[1] = t.color[1] + p.random([-1, 1])), 0, 255;
-        (t.color[2] = t.color[2] + p.random([-1, 1])), 0, 255;
-      }
+      t.color[0] = t.color[0] + p.random([-1, 1]);
+      t.color[1] = t.color[1] + p.random([-1, 1]);
+      t.color[2] = t.color[2] + p.random([-1, 1]);
       t.move();
       t.draw(p, this._base, this._extraBright);
     });
