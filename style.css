@@ -154,7 +154,7 @@ img {
   position: fixed;
   top: 0;
   left: 0;
-  display: none;
+  display: block;
 }
 
 /* Add animation (fade in the popup) */
