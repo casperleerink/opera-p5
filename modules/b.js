@@ -128,7 +128,7 @@ function B(p) {
       if (coloring) {
         document.body.style.cursor = "none";
       } else {
-        document.body.style.cursor = "not-allowed";
+        document.body.style.cursor = "auto";
       }
     }
 

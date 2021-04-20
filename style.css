@@ -111,6 +111,9 @@ img {
   color: var(--primary-color);
   /* min-height: 100%; */
 }
+.welcome-container p {
+  padding-bottom: 1rem;
+}
 .welcome-container h1 {
   padding: 1rem 0;
 }
