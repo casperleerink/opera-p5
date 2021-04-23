@@ -4,7 +4,7 @@ export default class Cloud {
     this._scale = scale;
     this._imgHeight =
       (this._scale * this._img.height * p.width) / this._img.width;
-    this._x = 0.5;
+    this._x = 0.2;
     this._y = 20 + this._imgHeight / 2;
     this._w = this._scale * p.width;
     this._extraBright = 0;
@@ -13,7 +13,7 @@ export default class Cloud {
   draw(p, timeSinceStart, timeSinceClick, glow) {
     this._imgHeight =
       (this._scale * this._img.height * p.width) / this._img.width;
-    this._x = 0.5 * p.width;
+    this._x = 0.2 * p.width;
     this._y = 20 + this._imgHeight / 2;
     this._w = this._scale * p.width;
     const sinTime = p.sin(timeSinceStart * 0.001 - p.HALF_PI) + 1;

@@ -26,36 +26,49 @@
         <!-- The welcoming page -->
         <div id="welcome-page">
             <div class="welcome-container">
-                <h6>Welcome to the interactive online opera.</h6>
-                <p><em>Once She Dries</em> is a love story</p>
-                <p>between coral reef<br>
-                    a rain cloud <br>
-                    and the Pantheon.<br>
-                    <br>
-                    Coral loves Cloud<br>
-                    Pantheon loves Coral<br>
-                    and Cloud is<br>
-                    fickle as weather. </p>
-
-                <p>This opera is based on three true stories of science:</p>
-                <ol>
-                    <li>Coral reefs are dying at an alarming rate, heading for extinction by the end of this century. In their absence, vast communities of fish will lose their home and our land will be threatened by dangerous tidal waves and hurricanes that reefs currently help dissipate.</li>
-                    <li>When overheated and at risk of bleaching, coral reefs emit a pheromone-like bio-chemical that triggers water vapors to form cooling cloud formation directly overhead. Coral has the ability to <em>attract</em> a cloud.</li>
-                    <li>To help resuscitate reef life, scientists have begun dropping tiny concrete pellets that simulate the texture of coral and support healthy habitats for ecologies to regrow and thrive. 
-                    <br>(3 ½. The Pantheon happens to be the largest unreinforced concrete dome in the world...)</li>
-                </ol>
-                <p><em>Once She Dries</em> follows its non-human protagonists as they reshape their sense of love and lasting in the anthropocene age.</p>
-                <p>What you experience on this website will be less a simulation of the entire opera and more of a behind-the-scenes tour. 
-                    You’ll see various vignettes presented in a non-linear, interactive fashion. <br>
-                    Don’t worry, this experience won’t spoil how the show ends. You’ll find that out when we present the work live, ideally beachside.<br>
-                    For now, we’re offering you glimpses and clues at what takes place between Coral, Cloud and the Pantheon. We hope you enjoy peering inside.</p>
-                <p><strong>How to engage with the show</strong></p>
-                <p>If there is a text, click on the text</p>
-                <p>If there is an image, click on the image</p>
-                <button id="startButton">Start your journey</button>
+                <div class='beginning-text-animated'>
+                    <div id="title">
+                        <h1><b><em>Once She Dries</em></b></h1>
+                        <p>An experimental opera by Breathing Bass</p>
+                    </div>
+                    <div id="poem1">
+                        <p id="div2p1"><em>Once she Dries</em> is a love story</p>
+                        <p id="div2p2">between coral reef</p>
+                        <p id="div2p3">a rain cloud </p>
+                        <p id="div2p4">and the Pantheon.</p>      
+                    </div>
+                    <div id="poem2">
+                        <p id="div3p1">Coral loves Cloud</p>
+                        <p id="div3p2">Pantheon loves Coral</p>
+                        <p id="div3p3">and Cloud is</p>
+                        <p id="div3p4">fickle as weather.</p>
+                    </div>
+                    <div id="science">
+                        <p id="div4p1">This opera is based on three true stories of science:</p>
+                        <p id="div4p2">1. Coral reefs are heading towards extinction by the end of this century. In their absence, vast communities of fish will lose their home and our land will be threatened by dangerous tidal waves and hurricanes that reefs currently help dissipate. </p>
+                        <p id="div4p3">2. When overheated and at risk of bleaching, coral reefs emit a pheromone-like bio-chemical that triggers water vapors to form cooling cloud formation directly overhead. Coral has the ability to <em>attract</em> a cloud.</p>
+                        <p id="div4p4">3. To help resuscitate reef life, scientists have begun dropping tiny concrete pellets that simulate the texture of coral and support healthy habitats for ecologies to regrow and thrive.</p>
+                        <p id="div4p5">(3 ½. The Pantheon happens to be the largest unreinforced concrete dome in the world...)</p>
+                    </div>
+                    <div id="generalInfo">
+                        <p><em>Once She Dries</em> follows its non-human protagonists as they reshape their sense of love and lasting in the anthropocene age.</p>
+                        <p>What you experience on this website will be less a simulation of the entire opera and more of a behind-the-scenes tour.</p>
+                        <p>You’ll see various vignettes presented in a non-linear, interactive fashion.</p>
+                        <p>Don’t worry, this experience won’t spoil how the show ends. You’ll find that out when we present the work live (ideally beachside).</p>
+                        <p>For now, we’re offering you glimpses and clues at what takes place between Coral, Cloud and the Pantheon. We hope you enjoy peering inside.</p>
+                    </div>
+                </div>
+                <div id="instructions">
+                    <div>
+                        <p>Hint: After starting your journey, you can click on various texts and images to move the story forward. Sometimes the story goes on by itself...</p>
+                        <button id="startButton">Start your journey</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <script src="featureCheck.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+    <script src="animations.js"></script>
 </body>
 </html>

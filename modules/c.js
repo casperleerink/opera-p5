@@ -79,43 +79,33 @@ export default function C(p) {
     const currentTime = p.millis();
     const songProgress = this.sound.isLoaded()
       ? this.sound.currentTime() / this.sound.duration()
-      : 0;
+      : null;
 
     //clear and draw background
     p.clear();
-    if (this.soundEnded) {
-      const timeSinceEnd = currentTime - this.soundEnded;
-      if (timeSinceEnd < 2000) {
-        this.fadeProgress = timeSinceEnd / 2000;
-        p.background(0, this.fadeProgress * 255);
-      } else {
-        if (!this.fadedOut) {
-          this.sound.disconnect();
-          this.storm.pause();
-          this.storm.destroy();
-        }
-        this.fadedOut = true;
-        p.background(0);
-        if (timeSinceEnd < 8000) {
-          //Show Inside Pantheon text
-        } else {
-          this.sceneManager.showScene(D);
-        }
-      }
-    } else {
+    if (!songProgress) {
+      p.background(0);
+    }
+    if (songProgress && songProgress < 0.85) {
+      //beginning of song
       if (this.storyEnded) {
+        //user has clicked through the whole story
         p.background(0, 0);
       } else {
         this.lightning
           ? p.background(0, 255 - this.lightningStrength)
           : p.background(0, 255 - p.random(songProgress * 30));
       }
+    } else if (songProgress && songProgress >= 0.85) {
+      //ending of song, soft violin, inside pantheon text with fade
+      this.fadeProgress = (songProgress - 0.85) / 0.15;
+      p.background(0, this.fadeProgress * 255);
     }
 
-    //Move Coral down a bit at the beginning
+    //Move Coral tips down a bit at the beginning
     if (currentTime - this.startTime < 20000) {
       this.sceneManager.coral.tips.forEach((t) => {
-        const vel = 0.001 * (0.8 - t.pos.y) * Math.random();
+        const vel = 0.0015 * (0.8 - t.pos.y) * Math.random();
         t.pos = {
           x: t.pos.x,
           y: t.pos.y + vel,
@@ -127,13 +117,13 @@ export default function C(p) {
       p,
       this.lightning,
       currentTime - this.clickedTime,
-      this.soundEnded ? (1 - this.fadeProgress) * 3.5 : songProgress * 3 + 0.5
+      songProgress >= 0.85 ? (1 - this.fadeProgress) * 4.5 : songProgress * 4
     );
 
-    //Draw Text!
-    if (!this.soundEnded) {
+    if (songProgress > 0.05 && songProgress < 0.85) {
       if (!this.storyEnded) {
-        this.story.follow(p, this.textFollow, 0.02);
+        //allow user interactivity by clikcing through the main text of c.
+        this.story.follow(p, this.textFollow, 0.07);
         this.story.drawC(p);
         this.story.onHover(
           p,
@@ -147,6 +137,7 @@ export default function C(p) {
           }
         );
       } else {
+        //alternate between random texts when user clicked through text
         this.story.follow(p, this.textFollow, 0.15);
         this.story.drawCloudLostFound(p, this.cloudLost);
         if (currentTime % Math.round(Math.random() * 400) === 0) {
@@ -154,8 +145,25 @@ export default function C(p) {
           this.textFollow = p.random(this.sceneManager.coral.tips).pos;
         }
       }
-    } else {
-      this.story.insidePantheon(p, this.fadeProgress);
+    } else if (songProgress >= 0.85) {
+      //later part of the song show pantheon
+      //calc fade in and out of text realtive to time.
+      let opacity = 1;
+      if (this.fadeProgress < 0.2) {
+        opacity = this.fadeProgress * 5;
+      }
+      if (this.fadeProgress > 0.8) {
+        opacity = 1 - (this.fadeProgress - 0.8) * 5;
+      }
+      //draw text
+      this.story.insidePantheon(p, opacity);
+    }
+    if (this.soundEnded) {
+      //cleanup and to next scene at pantheon...
+      this.sound.disconnect();
+      this.storm.pause();
+      this.storm.destroy();
+      this.sceneManager.showScene(D);
     }
   };
 }

@@ -30,6 +30,10 @@ export default function E(p) {
         tip.baseVel = (timeSinceStart / 2000) * 0.003 * (Math.random() * 0.1);
       });
     }
+    if (timeSinceStart < 20000) {
+      const thickness = (timeSinceStart / 20000) * 2 + 1;
+      p.strokeWeight(thickness);
+    }
     this.coral.drawE(p);
 
     //STORY
