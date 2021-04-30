@@ -77,6 +77,7 @@ export default function C(p) {
   //DRAW
   this.draw = () => {
     const currentTime = p.millis();
+    const timeSinceStart = currentTime - this.startTime;
     const songProgress = this.sound.isLoaded()
       ? this.sound.currentTime() / this.sound.duration()
       : null;
@@ -120,10 +121,18 @@ export default function C(p) {
       songProgress >= 0.85 ? (1 - this.fadeProgress) * 4.5 : songProgress * 4
     );
 
-    if (songProgress > 0.05 && songProgress < 0.85) {
+    if (timeSinceStart > 15000 && songProgress < 0.85) {
       if (!this.storyEnded) {
         //allow user interactivity by clikcing through the main text of c.
         this.story.follow(p, this.textFollow, 0.07);
+        if (timeSinceStart < 25000) {
+          this.story.helperText(
+            p,
+            "(click on the text to advance the storm)",
+            { x: 0.5, y: 0.5 },
+            timeSinceStart - 15000
+          );
+        }
         this.story.drawC(p);
         this.story.onHover(
           p,

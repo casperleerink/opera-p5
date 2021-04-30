@@ -75,6 +75,7 @@ function A(p) {
     p.clear();
     p.background(0);
     const currentTime = p.millis();
+    const timeSinceStart = currentTime - this.startTime;
 
     //gradient image
     p.image(
@@ -89,8 +90,16 @@ function A(p) {
       this.coral.extraBright = (1 - timeDiffClicked / 2000) * 50;
     }
     this.coral.drawA(p);
-    if (currentTime - this.startTime > 5000) {
+    if (timeSinceStart > 5000) {
       this.story.follow(p, this.coral.tips[this.story.index].pos, 0.01);
+      if (timeSinceStart < 15000) {
+        this.story.helperText(
+          p,
+          "(click on the text to advance the story)",
+          { x: 0.5, y: 0.5 },
+          timeSinceStart - 5000
+        );
+      }
     }
     if (!this.climaxReached) {
       this.story.onHover(

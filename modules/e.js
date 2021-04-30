@@ -31,12 +31,16 @@ export default function E(p) {
       });
     }
     if (timeSinceStart < 20000) {
+      //show ending text
+      this.story.drawDEnd(p, timeSinceStart);
       const thickness = (timeSinceStart / 20000) * 2 + 1;
       p.strokeWeight(thickness);
     }
     this.coral.drawE(p);
 
     //STORY
-    this.story.onceSheDries(p, 1);
+    if (timeSinceStart > 10000) {
+      this.story.onceSheDries(p, timeSinceStart - 10000);
+    }
   };
 }

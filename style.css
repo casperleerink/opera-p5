@@ -139,7 +139,8 @@ img {
   transform: translateX(-50%);
 }
 
-#title,
+#title > h1,
+#title > p,
 #poem1 > p,
 #poem2 > p,
 #science > p,

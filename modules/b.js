@@ -92,6 +92,7 @@ function B(p) {
           p.height * 0.4
         );
       } else {
+        this.sound.disconnect();
         //when gradient completed moving up start scene C
         this.sceneManager.showScene(C);
       }
@@ -112,7 +113,17 @@ function B(p) {
     this.coral.drawB(p, coloring);
 
     //image related stuff
-    this.cloud.draw(p, timeSinceStart, this.deltaClickTime, this.glow);
+    if (this.soundEnded && currentTime - this.soundEnded < 5000) {
+      this.cloud.draw(
+        p,
+        timeSinceStart,
+        this.deltaClickTime,
+        this.glow,
+        (currentTime - this.soundEnded) / 5000
+      );
+    } else {
+      this.cloud.draw(p, timeSinceStart, this.deltaClickTime, this.glow, 1);
+    }
     if (this.clickEnabled) {
       this.cloud.onHover(
         p.mouseX,

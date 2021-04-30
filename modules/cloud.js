@@ -10,7 +10,7 @@ export default class Cloud {
     this._extraBright = 0;
   }
 
-  draw(p, timeSinceStart, timeSinceClick, glow) {
+  draw(p, timeSinceStart, timeSinceClick, glow, brightness) {
     this._imgHeight =
       (this._scale * this._img.height * p.width) / this._img.width;
     this._x = 0.2 * p.width;
@@ -18,7 +18,7 @@ export default class Cloud {
     this._w = this._scale * p.width;
     const sinTime = p.sin(timeSinceStart * 0.001 - p.HALF_PI) + 1;
     p.push();
-    p.tint(255, sinTime * 60 + this._extraBright);
+    p.tint(255, (sinTime * 60 + this._extraBright) * brightness);
     p.image(this._img, this._x, this._y, this._w, this._imgHeight);
     if (timeSinceClick > 1000 && glow) {
       p.stroke(224, 249, 255, ((timeSinceClick - 1000) / 10000) * 200);

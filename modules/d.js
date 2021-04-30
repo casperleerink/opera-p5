@@ -1,5 +1,5 @@
 import { setGradientCashe, clip } from "./util.js";
-import Pantheon from "./pantheon.js";
+// import Pantheon from "./pantheon.js";
 import E from "./e.js";
 export default function D(p) {
   this.startTime;
@@ -65,7 +65,7 @@ export default function D(p) {
     this.story = this.sceneManager.story;
 
     //Pantheon yellow rectangles
-    this.pantheon = new Pantheon(3, p.color(255, 247, 164));
+    // this.pantheon = new Pantheon(3, p.color(255, 247, 164));
 
     const nextBtn = document.getElementById("nextBtn");
     nextBtn.addEventListener("click", () => {
@@ -91,12 +91,9 @@ export default function D(p) {
     }
     if (this.soundEnded) {
       const delta = currentTime - this.soundEnded;
-      if (delta < 10000) {
+      if (delta < 5000) {
         this.gradientPos[0] = p.map(delta, 0, 4000, 0.2, -0.2);
         this.gradientPos[1] = p.map(delta, 0, 4000, 0.8, 1.2);
-
-        //show ending text
-        this.story.drawDEnd(p, delta);
       } else {
         this.sceneManager.showScene(E);
       }
@@ -116,17 +113,17 @@ export default function D(p) {
       p.height
     );
 
-    //draw yellow rectangles
-    if (deltaStartTime > 10000 && deltaStartTime < 80000) {
-      //p5 and progress
-      this.pantheon.draw(p, deltaStartTime / 80000);
-    }
+    // //draw yellow rectangles
+    // if (deltaStartTime > 10000 && deltaStartTime < 80000) {
+    //   //p5 and progress
+    //   // this.pantheon.draw(p, deltaStartTime / 80000);
+    // }
 
     //coral to yPos
     this.coral.drawD(p, this.yPos, deltaStartTime);
 
     //begin text
-    if (deltaStartTime <= 10000) {
+    if (deltaStartTime <= 25000) {
       this.story.drawDbegin(p, deltaStartTime);
     }
   };

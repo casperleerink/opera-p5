@@ -48,6 +48,32 @@ class Story {
     this._pos.y += p.sin(angle) * magnitude;
   }
 
+  fadeText(data) {
+    //calculates fades over time
+    const { time, fadeIn, fadeOut, duration } = data;
+    if (fadeIn && time < fadeIn) {
+      return time / fadeIn;
+    }
+    if (duration && fadeOut && time > duration - fadeOut) {
+      return 1 - (time - (duration - fadeOut)) / fadeOut;
+    }
+    return 1;
+  }
+  helperText(p, text, pos, time) {
+    const brightness = this.fadeText({
+      time,
+      fadeIn: 3000,
+      fadeOut: 2000,
+      duration: 10000,
+    });
+    p.push();
+    p.noStroke();
+    p.textStyle(p.ITALIC);
+    p.textSize(p.width * 0.013);
+    p.fill(255, 170 * brightness);
+    p.text(text, pos.x * p.width, pos.y * p.height);
+    p.pop();
+  }
   drawA(p) {
     if (this._a.length > 0) {
       this._currentLine = this._a[this._index];
@@ -88,15 +114,14 @@ class Story {
     p.pop();
   }
   drawDbegin(p, time) {
+    const brightness = this.fadeText({
+      time,
+      fadeIn: 8000,
+      fadeOut: 6000,
+      duration: 25000,
+    });
     p.push();
     p.noStroke();
-    let brightness = 1;
-    if (time < 2000) {
-      brightness = time / 2000;
-    }
-    if (time > 8000 && time < 10000) {
-      brightness = 1 - (time - 8000) / 2000;
-    }
     p.fill(255, this._brightness * brightness);
     p.textSize(p.width * 0.015);
     this._d.forEach((line, idx) => {
@@ -107,15 +132,14 @@ class Story {
     p.pop();
   }
   drawDEnd(p, time) {
+    const brightness = this.fadeText({
+      time,
+      fadeIn: 6000,
+      fadeOut: 6000,
+      duration: 20000,
+    });
     p.push();
     p.noStroke();
-    let brightness = 1;
-    if (time < 2000) {
-      brightness = time / 2000;
-    }
-    if (time > 8000 && time < 10000) {
-      brightness = 1 - (time - 8000) / 2000;
-    }
     p.fill(255, this._brightness * brightness);
     p.textSize(p.width * 0.015);
     this._d.forEach((line, idx) => {
@@ -125,7 +149,11 @@ class Story {
     });
     p.pop();
   }
-  onceSheDries(p, brightness) {
+  onceSheDries(p, time) {
+    const brightness = this.fadeText({
+      time,
+      fadeIn: 4000,
+    });
     p.push();
     p.noStroke();
     p.fill(255, this._brightness * brightness);
