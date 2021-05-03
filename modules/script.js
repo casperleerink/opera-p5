@@ -11,10 +11,10 @@ fullScreenButton();
 
 //skip website beginning text
 const nextBtn = document.getElementById("nextBtn");
-nextBtn.addEventListener("click", () => {
+nextBtn.addEventListener("click", function () {
+  masterTimeline.pause();
+  showInstructions();
   nextBtn.removeEventListener("click", this);
-  welcomePage.style.display = "none";
-  new p5(sketch, sketchContainer);
 });
 
 startButton.style.display = "block";

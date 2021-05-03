@@ -21,14 +21,24 @@ function B(p) {
     this.startTime = p.millis();
     this.clickTime = p.millis();
     //sound
-    this.sound = p.loadSound("assets/audio/part-b-collapsed.mp3", () => {
-      this.startTime = p.millis();
-      this.sound.play();
+    this.sound = new Howl({
+      src: ["assets/audio/part-b-collapsed.mp3"],
+      html5: true,
+      autoplay: true,
+      loop: false,
+      onend: () => {
+        this.soundEnded = p.millis();
+        this.sound.unload();
+      },
     });
-    this.sound.onended(() => {
-      this.soundEnded = p.millis();
-      this.sound.disconnect();
-    });
+    // this.sound = p.loadSound("assets/audio/part-b-collapsed.mp3", () => {
+    //   this.startTime = p.millis();
+    //   this.sound.play();
+    // });
+    // this.sound.onended(() => {
+    //   this.soundEnded = p.millis();
+    //   this.sound.disconnect();
+    // });
 
     this.sceneManager.cnv.mousePressed(() => {
       this.glow = false;
@@ -36,10 +46,11 @@ function B(p) {
     });
 
     const nextBtn = document.getElementById("nextBtn");
-    nextBtn.addEventListener("click", () => {
+    const me = this;
+    nextBtn.addEventListener("click", function () {
+      me.sound.unload();
+      me.sceneManager.showScene(C);
       nextBtn.removeEventListener("click", this);
-      this.sound.disconnect();
-      this.sceneManager.showScene(C);
     });
   };
 
@@ -92,7 +103,7 @@ function B(p) {
           p.height * 0.4
         );
       } else {
-        this.sound.disconnect();
+        this.sound.unload();
         //when gradient completed moving up start scene C
         this.sceneManager.showScene(C);
       }

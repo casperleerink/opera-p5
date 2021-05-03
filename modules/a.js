@@ -26,7 +26,7 @@ function A(p) {
             this.story.index++;
           } else {
             this.story.index++;
-            this.soundDrone.setVolume(0.0, 1.0);
+            this.soundDrone.fade(1.0, 0.0, 2000);
             this.soundClimax.play();
             this.climaxReached = p.millis();
           }
@@ -38,17 +38,35 @@ function A(p) {
     });
 
     //sound
-    this.soundDrone = p.loadSound("assets/audio/part-a-drone.mp3", () => {
-      this.soundDrone.loop();
+    // this.soundDrone = p.loadSound("assets/audio/part-a-drone.mp3", () => {
+    //   this.soundDrone.loop();
+    // });
+    this.soundDrone = new Howl({
+      src: ["assets/audio/part-a-drone.mp3"],
+      html5: true,
+      autoplay: true,
+      loop: true,
     });
-    this.soundClimax = p.loadSound("assets/audio/marvel-at-her-majesty.mp3");
-    this.soundClimax.onended(() => {
-      //go to next scene, disconnect old sounds to clean up memory.
-      this.soundClimax.disconnect();
-      this.soundDrone.disconnect();
-      document.body.style.cursor = "auto";
-      this.sceneManager.showScene(B, { gradient: this.gradient });
+    // this.soundClimax = p.loadSound("assets/audio/marvel-at-her-majesty.mp3");
+    this.soundClimax = new Howl({
+      src: ["assets/audio/marvel-at-her-majesty.mp3"],
+      html5: true,
+      autoplay: false,
+      loop: false,
+      onend: () => {
+        document.body.style.cursor = "auto";
+        this.soundClimax.unload();
+        this.soundDrone.unload();
+        this.sceneManager.showScene(B, { gradient: this.gradient });
+      },
     });
+    // this.soundClimax.onended(() => {
+    //   //go to next scene, disconnect old sounds to clean up memory.
+    //   this.soundClimax.disconnect();
+    //   this.soundDrone.disconnect();
+    //   document.body.style.cursor = "auto";
+    //   this.sceneManager.showScene(B, { gradient: this.gradient });
+    // });
     this.gradient = p.createGraphics(p.width, p.height * 0.4);
     setGradientCashe(
       p,
@@ -61,11 +79,13 @@ function A(p) {
     );
 
     const nextBtn = document.getElementById("nextBtn");
-    nextBtn.addEventListener("click", () => {
+    const me = this;
+    nextBtn.addEventListener("click", function () {
+      document.body.style.cursor = "auto";
+      me.soundClimax.unload();
+      me.soundDrone.unload();
+      me.sceneManager.showScene(B, { gradient: me.gradient });
       nextBtn.removeEventListener("click", this);
-      this.soundClimax.disconnect();
-      this.soundDrone.disconnect();
-      this.sceneManager.showScene(B, { gradient: this.gradient });
     });
   };
 
@@ -95,7 +115,7 @@ function A(p) {
       if (timeSinceStart < 15000) {
         this.story.helperText(
           p,
-          "(click on the text to advance the story)",
+          "(click on the moving text to advance the story)",
           { x: 0.5, y: 0.5 },
           timeSinceStart - 5000
         );

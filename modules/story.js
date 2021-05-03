@@ -134,9 +134,9 @@ class Story {
   drawDEnd(p, time) {
     const brightness = this.fadeText({
       time,
-      fadeIn: 6000,
+      fadeIn: 10000,
       fadeOut: 6000,
-      duration: 20000,
+      duration: 30000,
     });
     p.push();
     p.noStroke();
@@ -144,7 +144,7 @@ class Story {
     p.textSize(p.width * 0.015);
     this._d.forEach((line, idx) => {
       if (idx > 4) {
-        p.text(line, 0.5 * p.width, (0.3 + idx * 0.05) * p.height);
+        p.text(line, 0.5 * p.width, (0.1 + (idx - 4) * 0.05) * p.height);
       }
     });
     p.pop();
@@ -158,7 +158,7 @@ class Story {
     p.noStroke();
     p.fill(255, this._brightness * brightness);
     p.textSize(p.width * 0.02);
-    p.text("Once She Dries", 0.5 * p.width, 0.4 * p.height);
+    p.text("Once She Dries", 0.5 * p.width, 0.5 * p.height);
     p.pop();
   }
 

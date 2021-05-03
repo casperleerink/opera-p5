@@ -49,18 +49,34 @@ export default function D(p) {
     });
 
     //SOUND
-    this.sound = p.loadSound("assets/audio/part4.mp3", () => {
-      setTimeout(() => {
-        this.sound.play();
-      }, 10000);
-      this.sound.onended(() => {
+    this.sound = new Howl({
+      src: ["assets/audio/part4.mp3"],
+      html5: true,
+      autoplay: false,
+      loop: false,
+      onend: () => {
         this.soundEnded = p.millis();
         this.yPos.length = 0;
         this.coral.tips.forEach((t) => {
           this.yPos.push(p.random(0.2, 0.7));
         });
-      });
+      },
     });
+    setTimeout(() => {
+      this.sound.play();
+    }, 10000);
+    // this.sound = p.loadSound("assets/audio/part4.mp3", () => {
+    //   setTimeout(() => {
+    //     this.sound.play();
+    //   }, 10000);
+    //   this.sound.onended(() => {
+    //     this.soundEnded = p.millis();
+    //     this.yPos.length = 0;
+    //     this.coral.tips.forEach((t) => {
+    //       this.yPos.push(p.random(0.2, 0.7));
+    //     });
+    //   });
+    // });
 
     this.story = this.sceneManager.story;
 
@@ -68,10 +84,12 @@ export default function D(p) {
     // this.pantheon = new Pantheon(3, p.color(255, 247, 164));
 
     const nextBtn = document.getElementById("nextBtn");
-    nextBtn.addEventListener("click", () => {
+    const me = this;
+    nextBtn.addEventListener("click", function () {
+      me.sound.stop();
+      me.sound.unload();
+      me.sceneManager.showScene(E);
       nextBtn.removeEventListener("click", this);
-      this.sound.disconnect();
-      this.sceneManager.showScene(E);
     });
   };
 
@@ -84,10 +102,10 @@ export default function D(p) {
 
     //gradient background (pantheon)
     const deltaStartTime = currentTime - this.startTime;
-    if (deltaStartTime < 10000) {
-      this.gradientPos[0] = p.map(deltaStartTime, 0, 10000, -0.2, 0.2);
-      this.gradientPos[1] = p.map(deltaStartTime, 0, 10000, 1.2, 0.8);
-      p.strokeWeight(p.map(deltaStartTime, 0, 10000, 1.0, 0.5));
+    if (deltaStartTime < 60000) {
+      this.gradientPos[0] = p.map(deltaStartTime, 0, 60000, -0.2, 0.2);
+      this.gradientPos[1] = p.map(deltaStartTime, 0, 60000, 1.2, 0.8);
+      p.strokeWeight(p.map(deltaStartTime, 0, 60000, 1.0, 0.5));
     }
     if (this.soundEnded) {
       const delta = currentTime - this.soundEnded;
@@ -95,6 +113,7 @@ export default function D(p) {
         this.gradientPos[0] = p.map(delta, 0, 4000, 0.2, -0.2);
         this.gradientPos[1] = p.map(delta, 0, 4000, 0.8, 1.2);
       } else {
+        this.sound.unload();
         this.sceneManager.showScene(E);
       }
     }

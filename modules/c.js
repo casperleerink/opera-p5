@@ -20,13 +20,23 @@ export default function C(p) {
     this.clickedTime = p.millis() - 10000;
 
     //sound setup
-    this.sound = p.loadSound("assets/audio/storm.mp3", () => {
-      this.sound.play();
-      this.sound.onended(() => {
-        this.sound.disconnect();
+    this.sound = new Howl({
+      src: ["assets/audio/storm.mp3"],
+      html5: true,
+      autoplay: true,
+      loop: false,
+      onend: () => {
+        this.sound.unload();
         this.soundEnded = p.millis();
-      });
+      },
     });
+    // this.sound = p.loadSound("assets/audio/storm.mp3", () => {
+    //   this.sound.play();
+    //   this.sound.onended(() => {
+    //     this.sound.disconnect();
+    //     this.soundEnded = p.millis();
+    //   });
+    // });
 
     //video setup
     this.storm = new Storm(
@@ -47,12 +57,14 @@ export default function C(p) {
 
     //DEBUG ONLY
     const nextBtn = document.getElementById("nextBtn");
-    nextBtn.addEventListener("click", () => {
+    const me = this;
+    nextBtn.addEventListener("click", function () {
+      me.sound.stop();
+      me.sound.unload();
+      me.storm.pause();
+      me.storm.destroy();
+      me.sceneManager.showScene(D);
       nextBtn.removeEventListener("click", this);
-      this.sound.disconnect();
-      this.storm.pause();
-      this.storm.destroy();
-      this.sceneManager.showScene(D);
     });
   };
   //MOUSEPRESS FUNCTION
@@ -78,9 +90,13 @@ export default function C(p) {
   this.draw = () => {
     const currentTime = p.millis();
     const timeSinceStart = currentTime - this.startTime;
-    const songProgress = this.sound.isLoaded()
-      ? this.sound.currentTime() / this.sound.duration()
-      : null;
+    const songProgress =
+      this.sound.state() === "loaded"
+        ? this.sound.seek() / this.sound.duration()
+        : null;
+
+    // console.log(songProgress);
+    // console.log(this.sound.state(), this.sound.seek(), this.sound.duration());
 
     //clear and draw background
     p.clear();
@@ -149,7 +165,7 @@ export default function C(p) {
         //alternate between random texts when user clicked through text
         this.story.follow(p, this.textFollow, 0.15);
         this.story.drawCloudLostFound(p, this.cloudLost);
-        if (currentTime % Math.round(Math.random() * 400) === 0) {
+        if (Math.round(currentTime) % Math.round(Math.random() * 400) === 0) {
           this.cloudLost = !this.cloudLost;
           this.textFollow = p.random(this.sceneManager.coral.tips).pos;
         }
@@ -169,7 +185,7 @@ export default function C(p) {
     }
     if (this.soundEnded) {
       //cleanup and to next scene at pantheon...
-      this.sound.disconnect();
+      this.sound.unload();
       this.storm.pause();
       this.storm.destroy();
       this.sceneManager.showScene(D);

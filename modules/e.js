@@ -12,9 +12,24 @@ export default function E(p) {
     });
 
     //start playing the tune
-    const sound = p.loadSound("assets/audio/soft-piano-tune.mp3", () => {
-      sound.play();
+    const sound = new Howl({
+      src: ["assets/audio/soft-piano-tune.mp3"],
+      html5: true,
+      autoplay: true,
+      loop: false,
+      onend: () => {
+        this.sound.unload();
+        this.soundEnded = p.millis();
+        gsap.to("#creditsPage", { opacity: 0, duration: 10 });
+      },
     });
+    // const sound = p.loadSound("assets/audio/soft-piano-tune.mp3", () => {
+    //   sound.play();
+    // });
+    setTimeout(() => {
+      document.getElementById("creditsPage").style.display = "block";
+      gsap.to("#creditsPage", { opacity: 1, duration: 10 });
+    }, 30000);
   };
 
   //DRAW
@@ -30,17 +45,17 @@ export default function E(p) {
         tip.baseVel = (timeSinceStart / 2000) * 0.003 * (Math.random() * 0.1);
       });
     }
-    if (timeSinceStart < 20000) {
+    if (timeSinceStart < 30000) {
       //show ending text
       this.story.drawDEnd(p, timeSinceStart);
-      const thickness = (timeSinceStart / 20000) * 2 + 1;
+      const thickness = (timeSinceStart / 30000) * 2 + 1;
       p.strokeWeight(thickness);
     }
     this.coral.drawE(p);
 
     //STORY
-    if (timeSinceStart > 10000) {
-      this.story.onceSheDries(p, timeSinceStart - 10000);
+    if (timeSinceStart > 20000) {
+      this.story.onceSheDries(p, timeSinceStart - 20000);
     }
   };
 }

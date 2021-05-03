@@ -70,5 +70,10 @@ function showInstructions() {
   gsap.to("#instructions", { opacity: 1, duration: 2 });
 }
 
-var master = gsap.timeline({ onComplete: showInstructions });
-master.add(title()).add(poem1()).add(poem2()).add(science()).add(generalInfo());
+var masterTimeline = gsap.timeline({ onComplete: showInstructions });
+masterTimeline
+  .add(title())
+  .add(poem1())
+  .add(poem2())
+  .add(science())
+  .add(generalInfo());
