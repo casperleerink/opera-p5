@@ -112,12 +112,12 @@ function A(p) {
     this.coral.drawA(p);
     if (timeSinceStart > 5000) {
       this.story.follow(p, this.coral.tips[this.story.index].pos, 0.01);
-      if (timeSinceStart < 15000) {
+      if (timeSinceStart > 7000 && timeSinceStart < 17000) {
         this.story.helperText(
           p,
           "(click on the moving text to advance the story)",
           { x: 0.5, y: 0.5 },
-          timeSinceStart - 5000
+          timeSinceStart - 7000
         );
       }
     }

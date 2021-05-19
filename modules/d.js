@@ -50,7 +50,7 @@ export default function D(p) {
 
     //SOUND
     this.sound = new Howl({
-      src: ["assets/audio/part4.mp3"],
+      src: ["assets/audio/partD.mp3"],
       html5: true,
       autoplay: false,
       loop: false,

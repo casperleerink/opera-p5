@@ -116,7 +116,7 @@ class Story {
   drawDbegin(p, time) {
     const brightness = this.fadeText({
       time,
-      fadeIn: 8000,
+      fadeIn: 10000,
       fadeOut: 6000,
       duration: 25000,
     });
@@ -158,7 +158,7 @@ class Story {
     p.noStroke();
     p.fill(255, this._brightness * brightness);
     p.textSize(p.width * 0.02);
-    p.text("Once She Dries", 0.5 * p.width, 0.5 * p.height);
+    p.text("ONCE SHE DRIES", 0.5 * p.width, 0.5 * p.height);
     p.pop();
   }
 

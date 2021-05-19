@@ -141,12 +141,12 @@ export default function C(p) {
       if (!this.storyEnded) {
         //allow user interactivity by clikcing through the main text of c.
         this.story.follow(p, this.textFollow, 0.07);
-        if (timeSinceStart < 25000) {
+        if (timeSinceStart > 18000 && timeSinceStart < 28000) {
           this.story.helperText(
             p,
             "(click on the text to advance the storm)",
             { x: 0.5, y: 0.5 },
-            timeSinceStart - 15000
+            timeSinceStart - 18000
           );
         }
         this.story.drawC(p);
