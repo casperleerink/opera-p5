@@ -137,7 +137,7 @@ export default function C(p) {
       songProgress >= 0.85 ? (1 - this.fadeProgress) * 4.5 : songProgress * 4
     );
 
-    if (timeSinceStart > 15000 && songProgress < 0.85) {
+    if (timeSinceStart > 15000 && songProgress && songProgress < 0.85) {
       if (!this.storyEnded) {
         //allow user interactivity by clikcing through the main text of c.
         this.story.follow(p, this.textFollow, 0.07);

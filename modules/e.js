@@ -28,8 +28,12 @@ export default function E(p) {
     // });
     setTimeout(() => {
       document.getElementById("creditsPage").style.display = "block";
-      gsap.to("#creditsPage", { opacity: 1, duration: 10 });
-    }, 30000);
+      const tl = gsap.timeline({ delay: 1, defaults: { duration: 4 } });
+      tl.to("#credits1", { opacity: 1 }, ">5");
+      tl.to("#credits2", { opacity: 1 }, ">5");
+      tl.to("#credits3", { opacity: 1 }, ">5");
+      tl.to("#credits4", { opacity: 1 }, ">5");
+    }, 40000);
   };
 
   //DRAW
@@ -45,10 +49,10 @@ export default function E(p) {
         tip.baseVel = (timeSinceStart / 2000) * 0.003 * (Math.random() * 0.1);
       });
     }
-    if (timeSinceStart < 30000) {
+    if (timeSinceStart < 40000) {
       //show ending text
       this.story.drawDEnd(p, timeSinceStart);
-      const thickness = (timeSinceStart / 30000) * 2 + 1;
+      const thickness = (timeSinceStart / 40000) * 2 + 1;
       p.strokeWeight(thickness);
     }
     this.coral.drawE(p);
