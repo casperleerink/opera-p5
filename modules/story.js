@@ -116,9 +116,9 @@ class Story {
   drawDbegin(p, time) {
     const brightness = this.fadeText({
       time,
-      fadeIn: 22000,
+      fadeIn: 8000,
       fadeOut: 8000,
-      duration: 40000,
+      duration: 25000,
     });
     p.push();
     p.noStroke();

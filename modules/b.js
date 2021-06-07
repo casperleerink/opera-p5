@@ -31,14 +31,6 @@ function B(p) {
         this.sound.unload();
       },
     });
-    // this.sound = p.loadSound("assets/audio/part-b-collapsed.mp3", () => {
-    //   this.startTime = p.millis();
-    //   this.sound.play();
-    // });
-    // this.sound.onended(() => {
-    //   this.soundEnded = p.millis();
-    //   this.sound.disconnect();
-    // });
 
     this.sceneManager.cnv.mousePressed(() => {
       this.glow = false;
@@ -130,7 +122,7 @@ function B(p) {
         timeSinceStart,
         this.deltaClickTime,
         this.glow,
-        (currentTime - this.soundEnded) / 5000
+        1 - (currentTime - this.soundEnded) / 5000
       );
     } else {
       this.cloud.draw(p, timeSinceStart, this.deltaClickTime, this.glow, 1);

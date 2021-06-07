@@ -26,13 +26,27 @@ export default function E(p) {
     // const sound = p.loadSound("assets/audio/soft-piano-tune.mp3", () => {
     //   sound.play();
     // });
-    setTimeout(() => {
+    const endingPageTimeline = () => {
       document.getElementById("creditsPage").style.display = "block";
       const tl = gsap.timeline({ delay: 1, defaults: { duration: 4 } });
-      tl.to("#credits1", { opacity: 1 }, ">5");
-      tl.to("#credits2", { opacity: 1 }, ">5");
-      tl.to("#credits3", { opacity: 1 }, ">5");
-      tl.to("#credits4", { opacity: 1 }, ">5");
+      tl.to("#ending-text1", { opacity: 1 }, ">1");
+      tl.to("#ending-text2", { opacity: 1 }, ">1");
+      tl.to("#ending-text3", { opacity: 1 }, ">1");
+      tl.to("#ending-text4", { opacity: 1 }, ">1");
+      tl.to("#ending-text1", { opacity: 0 }, ">8");
+      tl.to("#ending-text2", { opacity: 0 }, "<");
+      tl.to("#ending-text3", { opacity: 0 }, "<");
+      tl.to("#ending-text4", { opacity: 0 }, "<");
+      tl.to("#ending-text5", { opacity: 1, duration: 5 }, "<");
+      tl.to("#ending-text5", { opacity: 0, duration: 50 }, ">20");
+    };
+    endingPageTimeline();
+    setTimeout(() => {
+      const tl = gsap.timeline({ delay: 1, defaults: { duration: 4 } });
+      tl.to("#credits1", { opacity: 1 }, ">10");
+      tl.to("#credits2", { opacity: 1 }, ">10");
+      tl.to("#credits3", { opacity: 1 }, ">10");
+      tl.to("#credits4", { opacity: 1 }, ">10");
     }, 40000);
   };
 
@@ -49,17 +63,6 @@ export default function E(p) {
         tip.baseVel = (timeSinceStart / 2000) * 0.003 * (Math.random() * 0.1);
       });
     }
-    if (timeSinceStart < 40000) {
-      //show ending text
-      this.story.drawDEnd(p, timeSinceStart);
-      const thickness = (timeSinceStart / 40000) * 2 + 1;
-      p.strokeWeight(thickness);
-    }
     this.coral.drawE(p);
-
-    //STORY
-    if (timeSinceStart > 20000) {
-      this.story.onceSheDries(p, timeSinceStart - 20000);
-    }
   };
 }

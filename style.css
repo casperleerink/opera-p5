@@ -227,6 +227,35 @@ img {
   padding: 8px 0;
   display: block;
 }
+#ending-text {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+#ending-text p {
+  padding: 0.2rem 0;
+}
+
+#ending-text h2 {
+  font-size: 2rem;
+  font-weight: 200;
+  padding-top: 1rem;
+}
+#ending-text1,
+#ending-text2,
+#ending-text3,
+#ending-text4,
+#ending-text5,
+#ending-text6 {
+  opacity: 0;
+}
 .credits-container {
   background-color: rgba(60, 60, 60, 0.4);
   position: absolute;
@@ -251,10 +280,10 @@ img {
   width: 27%;
 }
 #credits4 {
-  top: 55%;
+  top: 50%;
   left: 3%;
-  width: 30%;
-  max-height: 40%;
+  width: 40%;
+  max-height: 47%;
   overflow-y: scroll;
 }
 #credits4 a {

@@ -142,7 +142,7 @@ export default function D(p) {
     this.coral.drawD(p, this.yPos, deltaStartTime);
 
     //begin text
-    if (deltaStartTime <= 40000) {
+    if (deltaStartTime <= 25000) {
       this.story.drawDbegin(p, deltaStartTime);
     }
   };

@@ -10,8 +10,8 @@ if (showAlert) {
   );
 }
 
-if (window.innerWidth < 800) {
+if (window.innerWidth < 900) {
   alert(
-    "consider watching this on a desktop/laptop with a big screen for a better experience!"
+    "consider watching this on a desktop/laptop with a bigger screen for a better experience!"
   );
 }
